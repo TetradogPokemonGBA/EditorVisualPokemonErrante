@@ -50,8 +50,9 @@
                     </Grid>
                     <Grid Grid.Column="1">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="8*"/>
-                            <RowDefinition Height="21*"/>
+                            <RowDefinition Height="66*"/>
+                            <RowDefinition Height="37*"/>
+                            <RowDefinition Height="158*"/>
                         </Grid.RowDefinitions>
                         <Grid Grid.Row="0">
                             <Grid.RowDefinitions>
@@ -84,7 +85,15 @@
                             </StackPanel>
 
                         </Grid>
-                        <UniformGrid Grid.Row="1" x:Name="uniGridEstados"/>
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="190*"/>
+                                <ColumnDefinition Width="63*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0" x:Name="gridZTruns"/>
+                            <Grid Grid.Column="1" x:Name="gridImgDor"/>
+                        </Grid>
+                        <UniformGrid Grid.Row="2" x:Name="uniGridEstados"/>
                         <!--mas adelante poner toda la info que se pueda personalizar del pokemon-->
 
                     </Grid>
@@ -114,6 +123,14 @@
             <!--Zona donde se configuran las rutas en este caso si supera los 20 avisara que se tendra que repuntear la direccion por defecto por una nueva y que se pueda escoger por el usuario-->
             <!--Hay que mirar el maximo de filas que es 256-->
             <!--poder exportar el resultado para guardarlo  y poderlo importar tambien-->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="353*"/>
+                    <ColumnDefinition Width="154*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" x:Name="stkPanelFilasRutas"/>
+                
+            </Grid>
         </TabItem>
     </TabControl>
 </Window>

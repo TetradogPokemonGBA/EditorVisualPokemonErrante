@@ -75,11 +75,8 @@
     <Compile Include="AplicarEnLaRom.xaml.cs">
       <DependentUpon>AplicarEnLaRom.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EstadoRadio.xaml.cs">
-      <DependentUpon>EstadoRadio.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="EstadoCheck.xaml.cs">
-      <DependentUpon>EstadoCheck.xaml</DependentUpon>
+    <Compile Include="FilaRuta.xaml.cs">
+      <DependentUpon>FilaRuta.xaml</DependentUpon>
     </Compile>
     <Compile Include="PrevisualizarScriptHex.xaml.cs">
       <DependentUpon>PrevisualizarScriptHex.xaml</DependentUpon>
@@ -98,11 +95,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="EstadoRadio.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="EstadoCheck.xaml">
+    <Page Include="FilaRuta.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1321,6 +1314,42 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\nidoran_m.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="imagenes\Estados Color\Congelado.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="imagenes\Estados Color\Dormido.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="imagenes\Estados Color\Envenenado.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="imagenes\Estados Color\Envenenamiento_grave.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="imagenes\Estados Color\Paralizado.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="imagenes\Estados Color\Quemado.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="imagenes\Estados Blanco y Negro\Congelado-Off.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="imagenes\Estados Blanco y Negro\Dormido-Off.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="imagenes\Estados Blanco y Negro\Envenenado-Off.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="imagenes\Estados Blanco y Negro\Envenenamiento_grave-Off.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="imagenes\Estados Blanco y Negro\Paralizado-Off.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="imagenes\Estados Blanco y Negro\Quemado-Off.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

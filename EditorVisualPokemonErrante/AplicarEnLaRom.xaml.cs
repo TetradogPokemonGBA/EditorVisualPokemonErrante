@@ -23,7 +23,6 @@ namespace EditorVisualPokemonErrante
     /// </summary>
     public partial class AplicarEnLaRom : Window
     {
-        Gabriel.Cat.GBA.RomPokemon juego;
         bool isEsmeralda;
         int pokemon, vida;
         byte nivel, stat;
@@ -34,27 +33,27 @@ namespace EditorVisualPokemonErrante
         public AplicarEnLaRom(int pokemon, int vida, byte nivel, byte stat)
         {
             camposScript = new List<Hex>();
-            juego = null;
             this.pokemon = pokemon;
             this.vida = vida;
             this.nivel = nivel;
             this.stat = stat;
             InitializeComponent();
+            PonSiEstaElJuego();
         }
 
         private void btnAplicarEnJuego_Click(object sender, RoutedEventArgs e)
         {
             byte[] bytesScript;
-            if (juego == null)
+            if (MainWindow.Juego == null)
             {
                 MessageBox.Show("primero carga la ROM");
             }
             else if (ValidaLugarDondeSePondra())
             {
                 bytesScript = GetBytes();
-                for (int i= (Hex)lugarHaPonerLosBytes.Text,f=i+bytesScript.Length,pos=0;i<f;i++,pos++)
-                     juego.ArchivoGbaPokemon[i]=bytesScript[pos];
-                juego.Save();
+                for (int i= (Hex)txtOffset.Text,f=i+bytesScript.Length,pos=0;i<f;i++,pos++)
+                    MainWindow.Juego.ArchivoGbaPokemon[i]=bytesScript[pos];
+                MainWindow.Juego.Save();
               //  MessageBox.Show("Acabada de aplicar los cambios en la direccion puesta");
             }
             else
@@ -66,7 +65,7 @@ namespace EditorVisualPokemonErrante
 
         private bool ValidaLugarDondeSePondra()
         {
-            return Gabriel.Cat.Binaris.BuscarBloques.BuscaBloque(juego.ArchivoGbaPokemon, BYTESMEMORIA, (Hex)lugarHaPonerLosBytes.Text, BYTEEMPTY).Equals((Hex)lugarHaPonerLosBytes.Text);
+            return Gabriel.Cat.Binaris.BuscarBloques.BuscaBloque(MainWindow.Juego.ArchivoGbaPokemon, BYTESMEMORIA, (Hex)txtOffset.Text, BYTEEMPTY).Equals((Hex)txtOffset.Text);
         }
 
         private byte[] GetBytes()
@@ -84,11 +83,11 @@ namespace EditorVisualPokemonErrante
             {
                 if (openFileDialog.ShowDialog().Value)
                 {
-                    juego = new Gabriel.Cat.GBA.RomPokemon(new FileInfo(openFileDialog.FileName));
-                    isEsmeralda = juego.Version != Gabriel.Cat.GBA.RomPokemon.ROJOFUEGO;
+                    MainWindow.Juego = new Gabriel.Cat.GBA.RomPokemon(new FileInfo(openFileDialog.FileName));
+                    isEsmeralda = MainWindow.Juego.Version != Gabriel.Cat.GBA.RomPokemon.ROJOFUEGO;
                     if (isEsmeralda)
                     {
-                        if (juego.Version != Gabriel.Cat.GBA.RomPokemon.ESMERALDA)
+                        if (MainWindow.Juego.Version != Gabriel.Cat.GBA.RomPokemon.ESMERALDA)
                             throw new Exception();
                         imgVersionGame.SetImage(Resource1.Emerald);
                     }
@@ -99,41 +98,45 @@ namespace EditorVisualPokemonErrante
                 }
                 else
                 {
-                    nombreArchivo.Text = "";
-                    juego = null;
+                    txtNombreArchivo.Text = "";
+                    MainWindow.Juego = null;
                     MessageBox.Show("No se ha cargado ninguna ROM");
                 }
-                if (juego != null)
-                {
-                    camposScript.Clear();
-                    txtHexScript.Text = new PrevisualizarScriptHex(null, pokemon, vida, nivel, stat, isEsmeralda).txtScript.Text;
-                    nombreArchivo.Text = juego.NombreHack;
-                    lugarHaPonerLosBytes.Text = "";
-                    foreach (string hexNumString in txtHexScript.Text.Replace("\r\n", "").Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
-                    {
-                        camposScript.Add(hexNumString.Split('x')[1]);
-                    }
-                  //  MessageBox.Show("ROM cargada correctamente!");
-                }
+                PonSiEstaElJuego();
             }
             catch {
-                juego = null;
-                nombreArchivo.Text = "";
+                MainWindow.Juego = null;
+                txtNombreArchivo.Text = "";
                 MessageBox.Show("La ROM no es compatible");
                 
             }
 
         }
 
+        private void PonSiEstaElJuego()
+        {
+            if (MainWindow.Juego != null)
+            {
+                camposScript.Clear();
+                txtHexScript.Text = new PrevisualizarScriptHex(null, pokemon, vida, nivel, stat, isEsmeralda).txtScript.Text;
+                txtNombreArchivo.Text = MainWindow.Juego.NombreHack;
+                txtOffset.Text = "";
+                foreach (string hexNumString in txtHexScript.Text.Replace("\r\n", "").Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    camposScript.Add(hexNumString.Split('x')[1]);
+                }
+            }
+        }
+
         private void btnBuscarEspacioLibre_Click(object sender, RoutedEventArgs e)
         {
-            if (juego == null)
+            if (MainWindow.Juego == null)
             {
                 MessageBox.Show("primero carga la ROM");
             }
             else
             {
-                lugarHaPonerLosBytes.Text = (Hex)Gabriel.Cat.Binaris.BuscarBloques.BuscaBloque(juego.ArchivoGbaPokemon, BYTESMEMORIA, INICIO, BYTEEMPTY);
+                txtOffset.Text = (Hex)Gabriel.Cat.Binaris.BuscarBloques.BuscaBloque(MainWindow.Juego.ArchivoGbaPokemon, BYTESMEMORIA, INICIO, BYTEEMPTY);
             }
 
         }

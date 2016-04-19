@@ -12,7 +12,7 @@
                 <ColumnDefinition Width="53*"/>
                 <ColumnDefinition Width="20*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock x:Name="nombreArchivo" Text=""/>
+            <TextBlock x:Name="txtNombreArchivo" Text=""/>
             <Button Grid.Column="1" x:Name="btnCargarJuego" Content="Cargar juego" Click="btnCargarJuego_Click"/>
         </Grid>
         <Grid Height="149">
@@ -30,7 +30,7 @@
                 <ColumnDefinition Width="75*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="0x"/>
-            <TextBox Grid.Column="1" x:Name="lugarHaPonerLosBytes" Text="800000"/>
+            <TextBox Grid.Column="1" x:Name="txtOffset" Text="800000"/>
             <Button Grid.Column="2" x:Name="btnBuscarEspacioLibre" Content="Buscar espacio" Click="btnBuscarEspacioLibre_Click"/>
         </Grid>
         <Button x:Name="btnAplicarEnJuego" Click="btnAplicarEnJuego_Click" Content="Aplicar cambios"/>
