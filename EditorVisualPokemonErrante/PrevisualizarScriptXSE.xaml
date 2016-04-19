@@ -3,11 +3,22 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:EditorVisualPokemonErrante"
         mc:Ignorable="d"
-        Title="Preview script XSE" Height="300" Width="300">
-    <StackPanel>
-        <Image x:Name="imgVersion" MaxHeight="150"/>
-        <TextBox x:Name="txtScript" IsReadOnly="True"/>
-    </StackPanel>
+        Title="Preview script XSE" Height="298.611" Width="334.722" ResizeMode="CanMinimize">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0">
+            <Image x:Name="imgVersionR" MaxHeight="150"/>
+            <TextBox x:Name="txtScriptR" IsReadOnly="True"/>
+        </StackPanel>
+        <StackPanel Grid.Column="1">
+            <Image x:Name="imgVersionE" MaxHeight="150"/>
+            <TextBox x:Name="txtScriptE" IsReadOnly="True"/>
+        </StackPanel>
+    </Grid>
+
 </Window>

@@ -5,9 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EditorVisualPokemonErrante"
         mc:Ignorable="d"
-        Title="Previsualizar Script Hex" Height="300" Width="300">
-    <StackPanel>
-        <Image x:Name="imgVersion" MaxHeight="150"/>
-        <TextBox x:Name="txtScript" IsReadOnly="True"/>
-    </StackPanel>
+        Title="Previsualizar Script Hex" Height="298.611" Width="334.722" ResizeMode="CanMinimize">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0">
+            <Image x:Name="imgVersionR" MaxHeight="150"/>
+            <TextBox x:Name="txtScriptR" IsReadOnly="True"/>
+        </StackPanel>
+        <StackPanel Grid.Column="1">
+            <Image x:Name="imgVersionE" MaxHeight="150"/>
+            <TextBox x:Name="txtScriptE" IsReadOnly="True"/>
+        </StackPanel>
+    </Grid>
 </Window>
+

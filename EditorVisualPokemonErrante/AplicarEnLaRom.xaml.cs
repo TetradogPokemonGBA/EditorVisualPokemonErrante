@@ -44,28 +44,41 @@ namespace EditorVisualPokemonErrante
         private void btnAplicarEnJuego_Click(object sender, RoutedEventArgs e)
         {
             byte[] bytesScript;
-            if (MainWindow.Juego == null)
+            EliminarEspacios();
+            try
             {
-                MessageBox.Show("primero carga la ROM");
+                if (MainWindow.Juego == null)
+                {
+                    MessageBox.Show("primero carga la ROM");
+                }
+                else if (ValidaLugarDondeSePondra())
+                {
+                    bytesScript = GetBytes();
+                    for (int i = (Hex)txtOffset.Text, f = i + bytesScript.Length, pos = 0; i < f; i++, pos++)
+                        MainWindow.Juego.ArchivoGbaPokemon[i] = bytesScript[pos];
+                    MainWindow.Juego.Save();
+                    //  MessageBox.Show("Acabada de aplicar los cambios en la direccion puesta");
+                }
+                else
+                {
+                    MessageBox.Show("El lugar especificado no esta libre('0xFF')");
+                }
             }
-            else if (ValidaLugarDondeSePondra())
-            {
-                bytesScript = GetBytes();
-                for (int i= (Hex)txtOffset.Text,f=i+bytesScript.Length,pos=0;i<f;i++,pos++)
-                    MainWindow.Juego.ArchivoGbaPokemon[i]=bytesScript[pos];
-                MainWindow.Juego.Save();
-              //  MessageBox.Show("Acabada de aplicar los cambios en la direccion puesta");
-            }
-            else
-            {
-                MessageBox.Show("El lugar especificado no esta libre('0xFF')");
+            catch {
+                MessageBox.Show("el la direccion del offset tiene que estar en hexadecimal");
             }
 
         }
 
         private bool ValidaLugarDondeSePondra()
         {
+            EliminarEspacios();
             return Gabriel.Cat.Binaris.BuscarBloques.BuscaBloque(MainWindow.Juego.ArchivoGbaPokemon, BYTESMEMORIA, (Hex)txtOffset.Text, BYTEEMPTY).Equals((Hex)txtOffset.Text);
+        }
+
+        private void EliminarEspacios()
+        {
+            txtOffset.Text = txtOffset.Text.TrimStart(' ').TrimEnd(' ');
         }
 
         private byte[] GetBytes()
@@ -79,38 +92,41 @@ namespace EditorVisualPokemonErrante
         private void btnCargarJuego_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            try
-            {
                 if (openFileDialog.ShowDialog().Value)
                 {
                     MainWindow.Juego = new Gabriel.Cat.GBA.RomPokemon(new FileInfo(openFileDialog.FileName));
+                    if (MainWindow.Juego.Version != Gabriel.Cat.GBA.RomPokemon.ZAFIRO)
+                {
                     isEsmeralda = MainWindow.Juego.Version != Gabriel.Cat.GBA.RomPokemon.ROJOFUEGO;
-                    if (isEsmeralda)
-                    {
-                        if (MainWindow.Juego.Version != Gabriel.Cat.GBA.RomPokemon.ESMERALDA)
-                            throw new Exception();
-                        imgVersionGame.SetImage(Resource1.Emerald);
-                    }
-                    else
-                    {
-                        imgVersionGame.SetImage(Resource1.FireRed);
-                    }
+                    
                 }
+                else
+                    {
+                        MainWindow.Juego = null;
+                        txtNombreArchivo.Text = "";
+                        MessageBox.Show("La ROM no es compatible");
+                    }
+                    }
                 else
                 {
                     txtNombreArchivo.Text = "";
                     MainWindow.Juego = null;
                     MessageBox.Show("No se ha cargado ninguna ROM");
                 }
-                PonSiEstaElJuego();
-            }
-            catch {
-                MainWindow.Juego = null;
-                txtNombreArchivo.Text = "";
-                MessageBox.Show("La ROM no es compatible");
-                
-            }
 
+                PonSiEstaElJuego();
+        }
+
+        private void PonImagen()
+        {
+            if (isEsmeralda)
+            {
+                imgVersionGame.SetImage(Resource1.Emerald);
+            }
+            else
+            {
+                imgVersionGame.SetImage(Resource1.FireRed);
+            }
         }
 
         private void PonSiEstaElJuego()
@@ -118,13 +134,14 @@ namespace EditorVisualPokemonErrante
             if (MainWindow.Juego != null)
             {
                 camposScript.Clear();
-                txtHexScript.Text = new PrevisualizarScriptHex(null, pokemon, vida, nivel, stat, isEsmeralda).txtScript.Text;
+                txtHexScript.Text = new PrevisualizarScriptHex(pokemon, vida, nivel, stat).txtScriptR.Text;
                 txtNombreArchivo.Text = MainWindow.Juego.NombreHack;
                 txtOffset.Text = "";
                 foreach (string hexNumString in txtHexScript.Text.Replace("\r\n", "").Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     camposScript.Add(hexNumString.Split('x')[1]);
                 }
+                PonImagen();
             }
         }
 

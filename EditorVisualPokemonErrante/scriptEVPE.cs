@@ -14,16 +14,14 @@ namespace EditorVisualPokemonErrante
         short vida;
         byte nivel;
         byte estado;
-        bool esEsmeralda;
-        public scriptEVPE(short pokemon, short vida, byte nivel, byte estado, bool esEsmeralda):this()
+
+
+        public scriptEVPE(short pokemon, short vida, byte nivel, byte estado):this()
         {
             this.pokemon = pokemon;
             this.vida = vida;
             this.nivel = nivel;
             this.estado = estado;
-            this.esEsmeralda = esEsmeralda;
-
-
         }
         private scriptEVPE()
         {
@@ -32,8 +30,10 @@ namespace EditorVisualPokemonErrante
             base.PartesElemento.Afegir(Gabriel.Cat.Binaris.ElementoBinario.ElementosTipoAceptado(Gabriel.Cat.Serializar.TiposAceptados.Short));
             base.PartesElemento.Afegir(Gabriel.Cat.Binaris.ElementoBinario.ElementosTipoAceptado(Gabriel.Cat.Serializar.TiposAceptados.Byte));
             base.PartesElemento.Afegir(Gabriel.Cat.Binaris.ElementoBinario.ElementosTipoAceptado(Gabriel.Cat.Serializar.TiposAceptados.Byte));
-            base.PartesElemento.Afegir(Gabriel.Cat.Binaris.ElementoBinario.ElementosTipoAceptado(Gabriel.Cat.Serializar.TiposAceptados.Bool));
         }
+
+
+
         public short Pokemon
         {
             get
@@ -86,23 +86,10 @@ namespace EditorVisualPokemonErrante
             }
         }
 
-        public bool EsEsmeralda
-        {
-            get
-            {
-                return esEsmeralda;
-            }
-
-            set
-            {
-                esEsmeralda = value;
-            }
-        }
-
 
         public override object GetObject(object[] parts)
         {
-            return new scriptEVPE(Convert.ToInt16(parts[0]), Convert.ToInt16(parts[1]), Convert.ToByte(parts[2]), Convert.ToByte(parts[3]), Convert.ToBoolean(parts[4]));
+            return new scriptEVPE(Convert.ToInt16(parts[0]), Convert.ToInt16(parts[1]), Convert.ToByte(parts[2]), Convert.ToByte(parts[3]));
         }
 
 
@@ -117,7 +104,6 @@ namespace EditorVisualPokemonErrante
                 bytes.AddRange(base.PartesElemento[1].GetBytes(script.vida));
                 bytes.AddRange(base.PartesElemento[2].GetBytes(script.nivel));
                 bytes.AddRange(base.PartesElemento[3].GetBytes(script.estado));
-                bytes.AddRange(base.PartesElemento[4].GetBytes(script.esEsmeralda));
             }
             else
                 bytes.Add((byte)0x0);

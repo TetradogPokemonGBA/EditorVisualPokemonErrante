@@ -7,7 +7,7 @@
         xmlns:wfi="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
         xmlns:winForms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
         mc:Ignorable="d" 
-        Title="Editor Visual Pokemon Errante by pikachu240" Height="350" Width="525">
+        Title="Editor Visual Pokemon Errante  by pikachu240, investigado by Razhier" Height="350" Width="525">
     <TabControl>
         <TabItem Header="Pokemon Errante" >
             <!--Zona para crear el scrip y poderlo poner en una rom escogida i/o poderlo guardar en formato XSE estaria poder tambien importar aunque parece mas dificil aunque si se exporta como bytes y se importa luego es igual :D es mio-->
@@ -60,24 +60,7 @@
                                 <RowDefinition Height="21*"/>
                                 <RowDefinition Height="25*"/>
                             </Grid.RowDefinitions>
-                            <Grid Grid.Row="0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="128*"/>
-                                    <ColumnDefinition Width="35*"/>
-                                    <ColumnDefinition Width="35*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="Versión    " HorizontalAlignment="Right"/>
-                                <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                    <Image  x:Name="imgIcoEsmeralda"/>
-                                    <Grid Width="3"/>
-                                    <RadioButton x:Name="rbEsmeralda" VerticalAlignment="Center" IsChecked="True" GroupName="rbJuego"/>
-                                </StackPanel>
-
-
-                                <RadioButton Grid.Column="2" GroupName="rbJuego" >
-                                    <Image x:Name="imgIcoRojoFuego"/>
-                                </RadioButton>
-                            </Grid>
+                            <Image Grid.Row="0" x:Name="imgIcoJuego" HorizontalAlignment="Right"/>
                             <StackPanel Grid.Row="1" Orientation="Horizontal">
                                 <TextBlock  Text="Vida " />
                                 <TextBox x:Name="txtVidaQueTiene" PreviewTextInput="txtVidaQueTiene_PreviewTextInput" Width="110" Text="100"/>
@@ -104,18 +87,21 @@
                     <!--lista de pokemons-->
                     <!--Poder ver la vista previa del script y en forma de bytes en HEX-->
                     <MenuItem Header="Exportar">
-                        <MenuItem x:Name="exportarXSE" Header="XSE" Click="exportarXSE_Click" />
-                        <MenuItem x:Name="exportarEVPE" Header="EVPE" Click="exportarEVPE_Click" />
+                        <MenuItem x:Name="exportarXSE" Header="XSE">
+                            <MenuItem Header="RojoFuego/VerdeHoja" Click="exportarFRXSE_Click"/>
+                            <MenuItem Header="Esmeralda" Click="exportarEXSE_Click"/>
+                        </MenuItem>
+                        <MenuItem x:Name="exportarEVPE" Header="EVPEP1" Click="exportarEVPE_Click" />
                     </MenuItem>
                     <MenuItem Header="Importar">
-                        <MenuItem x:Name="importarEVPE" Header="EVPE" Click="importarEVPE_Click" />
+                        <MenuItem x:Name="importarEVPE" Header="EVPEP1" Click="importarEVPE_Click" />
                     </MenuItem>
                     <MenuItem Header="Previsualizar">
                         <MenuItem x:Name="previsualizacionXSE"  Header="texto XSE" Click="previsualizacionXSE_Click"/>
                         <MenuItem x:Name="previsualizacionHex" Header="byte Hex" Click="previsualizacionHex_Click"/>
                     </MenuItem>
                     <MenuItem Header="Aplicar en la rom" Click="MenuItem_Click" />
-                    <ComboBox x:Name="cmbPokemons" Width="165" SelectionChanged="cmbPokemons_SelectionChanged"/>
+                    <ComboBox x:Name="cmbPokemons" Width="165" SelectionChanged="cmbPokemons_SelectionChanged" IsTextSearchEnabled="True" IsEditable="True"/>
                 </Menu>
             </Grid>
         </TabItem>

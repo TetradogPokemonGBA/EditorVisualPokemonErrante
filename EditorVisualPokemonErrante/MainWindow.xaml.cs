@@ -11,7 +11,7 @@ using Gabriel.Cat;
 
 namespace EditorVisualPokemonErrante
 {
-    public enum Estados : Int16
+    public enum Estados : short
     {
         Dormido = 0, Envenenado = 8, Quemado = 16, Congelado = 32, Paralizado = 64, Envenenamiento_grave = 128
     }
@@ -45,7 +45,8 @@ namespace EditorVisualPokemonErrante
     public partial class MainWindow : Window
     {
         //Busca los pointers 58 6C 46 08 en FR, o 04 1A 5D 08 en esmeralda // A00000 -> 00 00 A0 08
-        public static Gabriel.Cat.GBA.RomPokemon Juego { get; set; }
+        static Gabriel.Cat.GBA.RomPokemon juego;
+        static event EventHandler JuegoUpdated;
         Gabriel.Cat.Wpf.SwitchImg[] estados;
         Pokemon[] pokemons;
         private readonly int MAXNIVEL = 100;
@@ -84,14 +85,12 @@ namespace EditorVisualPokemonErrante
             estados = new Gabriel.Cat.Wpf.SwitchImg[enumEstados.Length];
             InitializeComponent();
             this.imgPokemon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            imgIcoEsmeralda.SetImage(Resource1.Emerald);
-            imgIcoRojoFuego.SetImage(Resource1.FireRed);
-            estados[0] = new Gabriel.Cat.Wpf.SwitchImg(Resource1.Dormido, Resource1.Dormido_Off) { Tag = (Int16)Estados.Dormido, CambiarHaciendoClick = false };
-            estados[1] = new Gabriel.Cat.Wpf.SwitchImg(Resource1.Envenenado, Resource1.Envenenado_Off) { Tag = (Int16)Estados.Envenenado };
-            estados[2] = new Gabriel.Cat.Wpf.SwitchImg(Resource1.Quemado, Resource1.Quemado_Off) { Tag = (Int16)Estados.Quemado };
-            estados[3] = new Gabriel.Cat.Wpf.SwitchImg(Resource1.Congelado, Resource1.Congelado_Off) { Tag = (Int16)Estados.Congelado };
-            estados[4] = new Gabriel.Cat.Wpf.SwitchImg(Resource1.Paralizado, Resource1.Paralizado_Off) { Tag = (Int16)Estados.Paralizado };
-            estados[5] = new Gabriel.Cat.Wpf.SwitchImg(Resource1.Envenenamiento_grave, Resource1.Envenenamiento_grave_Off) { Tag = (Int16)Estados.Envenenamiento_grave };
+            estados[0] = new Gabriel.Cat.Wpf.SwitchImg(Resource1.Dormido, Resource1.Dormido_Off) { Tag = (short)Estados.Dormido, CambiarHaciendoClick = false };
+            estados[1] = new Gabriel.Cat.Wpf.SwitchImg(Resource1.Envenenado, Resource1.Envenenado_Off) { Tag = (short)Estados.Envenenado };
+            estados[2] = new Gabriel.Cat.Wpf.SwitchImg(Resource1.Quemado, Resource1.Quemado_Off) { Tag = (short)Estados.Quemado };
+            estados[3] = new Gabriel.Cat.Wpf.SwitchImg(Resource1.Congelado, Resource1.Congelado_Off) { Tag = (short)Estados.Congelado };
+            estados[4] = new Gabriel.Cat.Wpf.SwitchImg(Resource1.Paralizado, Resource1.Paralizado_Off) { Tag = (short)Estados.Paralizado };
+            estados[5] = new Gabriel.Cat.Wpf.SwitchImg(Resource1.Envenenamiento_grave, Resource1.Envenenamiento_grave_Off) { Tag = (short)Estados.Envenenamiento_grave };
             //cargo los pokemons
             pokemons = new Pokemon[pokemosString.Length - 1];
             for (int i = 0; i < pokemons.Length; i++)
@@ -110,6 +109,21 @@ namespace EditorVisualPokemonErrante
             cmbPokemons.SelectedIndex = 0;
             uniGridEstados.Children.AddRange(estados.SubArray(1));
             gridImgDor.Children.Add(estados[0]);
+            JuegoUpdated += (s, e) => {
+                if (IsEsmeralda.Value)
+                    imgIcoJuego.SetImage(Resource1.Emerald);
+                else imgIcoJuego.SetImage(Resource1.FireRed);
+            };
+
+        }
+        public static Gabriel.Cat.GBA.RomPokemon Juego
+        {
+            get { return juego; }
+            set { juego = value; if(JuegoUpdated!=null) JuegoUpdated(null,null); }
+        }
+        public static bool? IsEsmeralda
+        {
+            get { return Juego != null ? Juego.Version == Gabriel.Cat.GBA.RomPokemon.ESMERALDA : new bool?(); }
         }
         private bool ValidadorLocalizacionTablaRutas(string numHex)
         {
@@ -123,16 +137,24 @@ namespace EditorVisualPokemonErrante
             }
             return (Hex)Juego.ArchivoGbaPokemon[Juego.Version == Gabriel.Cat.GBA.RomPokemon.ESMERALDA ? (int)VariablesEsmeralda.RutinaOffset1 : (int)VariablesRojoFuego.RutinaOffset1];
         }
-        private void exportarXSE_Click(object sender, RoutedEventArgs e)
+        private void exportarFRXSE_Click(object sender, RoutedEventArgs e)
         {
-            string path = GenerarNombreScript() + ".rbc";
+            ExportarXSE("FR", PreviewScripXSE().txtScriptR.Text);
+
+        }
+        private void exportarEXSE_Click(object sender, RoutedEventArgs e)
+        {
+            ExportarXSE("E", PreviewScripXSE().txtScriptR.Text);
+
+        }
+        private void ExportarXSE(string version, string script)
+        {
+            string path = GenerarNombreScript()+"-" + version + ".rbc";
             FileStream fs = new FileStream(path, FileMode.Create);
             StreamWriter sw = new StreamWriter(fs);
-            string script = PreviewScripXSE().txtScript.Text;
             sw.Write(script);
             sw.Close();
             fs.Close();
-
         }
 
         private string GenerarNombreScript()
@@ -142,34 +164,33 @@ namespace EditorVisualPokemonErrante
 
         private void exportarEVPE_Click(object sender, RoutedEventArgs e)
         {
-            scriptEVPE script = new scriptEVPE(Convert.ToInt16(((Pokemon)cmbPokemons.SelectedItem).NumeroNacional), Convert.ToInt16(txtVidaQueTiene.Text), Convert.ToByte(txtNivel.Text), SumaStatus(), rbEsmeralda.IsChecked.Value);
-            scriptEVPE.GetByteArray(script).Save(GenerarNombreScript() + ".evpe");
+            scriptEVPE script = new scriptEVPE(Convert.ToInt16(((Pokemon)cmbPokemons.SelectedItem).NumeroNacional), Convert.ToInt16(txtVidaQueTiene.Text), Convert.ToByte(txtNivel.Text), SumaStatus());
+            scriptEVPE.GetByteArray(script).Save(GenerarNombreScript() + ".evpep1");
         }
 
         private void importarEVPE_Click(object sender, RoutedEventArgs e)
         {
             scriptEVPE script;
             OpenFileDialog openFileDialog = new OpenFileDialog();
-
+            openFileDialog.Filter = "EVPE script part|*.evpep1";
             if (openFileDialog.ShowDialog().Value)
             {
                 script = scriptEVPE.GetScriptEVPE(new FileStream(openFileDialog.FileName, FileMode.Open));
                 txtNivel.Text = script.Nivel.ToString();
                 txtVidaQueTiene.Text = script.Vida.ToString();
                 cmbPokemons.SelectedIndex = script.Pokemon - 1;
-                rbEsmeralda.IsChecked = script.EsEsmeralda;
                 CargaEstado(script.Estado);
             }
 
         }
 
-        private void CargaEstado(Int16 estado)
+        private void CargaEstado(short estado)
         {
             for (int i = estados.Length - 1; i > 0; i--)
-                if (estado - (Int16)estados[i].Tag >= 0)
+                if (estado - (short)estados[i].Tag >= 0)
                 {
                     estados[i].EstadoOn = true;
-                    estado -= (Int16)estados[i].Tag;
+                    estado -= (short)estados[i].Tag;
                 }
             //me quedan los turnos sleep
         }
@@ -185,7 +206,7 @@ namespace EditorVisualPokemonErrante
             ValidarNiveYVida();
             nivel = Convert.ToInt32(txtNivel.Text);
             vida = Convert.ToInt32(txtVidaQueTiene.Text);
-            return new PrevisualizarScriptXSE(rbEsmeralda.IsChecked.Value ? imgIcoEsmeralda.Source : imgIcoRojoFuego.Source, (cmbPokemons.SelectedItem as Pokemon).NumeroNacional, vida, Convert.ToByte(nivel), SumaStatus(), rbEsmeralda.IsChecked.Value);
+            return new PrevisualizarScriptXSE((cmbPokemons.SelectedItem as Pokemon).NumeroNacional, vida, Convert.ToByte(nivel), SumaStatus());
         }
 
         private void ValidarNiveYVida()
@@ -211,7 +232,7 @@ namespace EditorVisualPokemonErrante
             ValidarNiveYVida();
             nivel = Convert.ToInt32(txtNivel.Text);
             vida = Convert.ToInt32(txtVidaQueTiene.Text);
-            new PrevisualizarScriptHex(rbEsmeralda.IsChecked.Value ? imgIcoEsmeralda.Source : imgIcoRojoFuego.Source, (cmbPokemons.SelectedItem as Pokemon).NumeroNacional, vida, Convert.ToByte(nivel), SumaStatus(), rbEsmeralda.IsChecked.Value).Show();
+            new PrevisualizarScriptHex((cmbPokemons.SelectedItem as Pokemon).NumeroNacional, vida, Convert.ToByte(nivel), SumaStatus()).Show();
 
         }
 

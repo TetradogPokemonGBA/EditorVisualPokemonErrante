@@ -17,17 +17,18 @@ namespace EditorVisualPokemonErrante
     /// <summary>
     /// Lógica de interacción para PrevisualizarScriptHex.xaml
     /// </summary>
-    public partial class PrevisualizarScriptHex : Window
+    public partial  class PrevisualizarScriptHex : Window
     {
-        public PrevisualizarScriptHex(ImageSource img, int pokemon, int vida, byte nivel, byte stat, bool isEsmeralda)
+        public PrevisualizarScriptHex( int pokemon, int vida, byte nivel, byte stat)
         {
-            string scriptHex = new PrevisualizarScriptXSE(img, pokemon, vida, nivel, stat, isEsmeralda).txtScript.Text;
+            PrevisualizarScriptXSE prvXSE = new PrevisualizarScriptXSE(pokemon, vida, nivel, stat);
             InitializeComponent();
-            if(img!=null)
-            this.imgVersion.Source = img;
-            scriptHex = scriptHex.Remove(0,PrevisualizarScriptXSE.CABEZERASCRIPT.Length).Replace("special","0x25").Replace("setvar", "0x16").Replace("end", "0xFF");
-            this.txtScript.Text =scriptHex;
+            txtScriptR.Text = prvXSE.txtScriptR.Text.Remove(0,PrevisualizarScriptXSE.CABEZERASCRIPT.Length).Replace("special","0x25").Replace("setvar", "0x16").Replace("end", "0xFF");
+            txtScriptE.Text = prvXSE.txtScriptE.Text.Remove(0, PrevisualizarScriptXSE.CABEZERASCRIPT.Length).Replace("special", "0x25").Replace("setvar", "0x16").Replace("end", "0xFF");
+            imgVersionE.Source = prvXSE.imgVersionE.Source;
+            imgVersionR.Source = prvXSE.imgVersionR.Source;
         }
+
 
 
     }
