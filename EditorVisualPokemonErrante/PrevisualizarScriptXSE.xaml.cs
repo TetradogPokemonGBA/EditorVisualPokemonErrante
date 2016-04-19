@@ -21,7 +21,7 @@ namespace EditorVisualPokemonErrante
     /// </summary>
     public partial class PrevisualizarScriptXSE : Window
     {
-        public const string CABEZERASCRIPT = "#org scriptPokemonErrante";
+        public const string CABEZERASCRIPT = "#dynamic 0x800000\r\n#org @ScriptPokemonErrante";
         public PrevisualizarScriptXSE()
         {
             InitializeComponent();
@@ -29,33 +29,24 @@ namespace EditorVisualPokemonErrante
 
         public PrevisualizarScriptXSE(int pokemon,int vida,byte nivel,byte stat):this()
         {
-            string variableEspecialE= ToHex((int)VariablesEsmeralda.Special), variableEspecialR= ToHex((int)VariablesRojoFuego.Special);
-            string variablePokemonE = ToHex((int)VariablesEsmeralda.Pokemon), variablePokemonR= ToHex((int)VariablesRojoFuego.Pokemon);
-            string variableNivelYEstadoE=ToHex((int)VariablesEsmeralda.NivelYEstado) , variableNivelYEstadoR= ToHex((int)VariablesRojoFuego.NivelYEstado);
-            string variableVitalidadE= ToHex((int)VariablesEsmeralda.Vitalidad) , variableVitalidadR= ToHex((int)VariablesRojoFuego.Vitalidad);
             string scriptE = CABEZERASCRIPT,scriptR=CABEZERASCRIPT;
-            scriptE += "\r\n special " + variableEspecialE;
-            scriptE += "\r\n setvar " + variablePokemonE + " " + ToHex(nivel);
-            scriptE += "\r\n setvar " + variableVitalidadE + " " + ToHex(vida);
-            scriptE += "\r\n setvar " + variableNivelYEstadoE + " 0x" + ((Hex)stat).ToString() + ((Hex)nivel).ToString();
-            scriptE += "\r\n end";
+            scriptE += "\r\nspecial " +MainWindow.VariableEspecialE;
+            scriptE += "\r\nsetvar " + MainWindow.VariablePokemonE + " " + ((Hex)pokemon).ByteString;
+            scriptE += "\r\nsetvar " + MainWindow.VariableVitalidadE + " " + ((Hex)vida).ByteString;
+            scriptE += "\r\nsetvar " + MainWindow.VariableNivelYEstadoE + " " +((Hex)stat).ByteString + ((Hex)nivel).Number;
+            scriptE += "\r\nend";
 
-            scriptR += "\r\n special " + variableEspecialR;
-            scriptR += "\r\n setvar " + variablePokemonR + " " + ToHex(nivel);
-            scriptR += "\r\n setvar " + variableVitalidadR + " " + ToHex(vida);
-            scriptR += "\r\n setvar " + variableNivelYEstadoR + " 0x" + ((Hex)stat).ToString() + ((Hex)nivel).ToString();
-            scriptR += "\r\n end";
-
-            
-            
+            scriptR += "\r\nspecial " + MainWindow.VariableEspecialR;
+            scriptR += "\r\nsetvar " + MainWindow.VariablePokemonR + " " +((Hex)pokemon).ByteString;
+            scriptR += "\r\nsetvar " + MainWindow.VariableVitalidadR + " " + ((Hex)vida).ByteString;
+            scriptR += "\r\nsetvar " + MainWindow.VariableNivelYEstadoR + " "+((Hex)stat).ByteString + ((Hex)nivel).Number;
+            scriptR += "\r\nend";
+             
             imgVersionR.SetImage(Resource1.FireRed);
             txtScriptR.Text = scriptR;
             imgVersionE.SetImage(Resource1.Emerald);
             txtScriptE.Text = scriptE;
         }
-        private string ToHex(int num)
-        {
-            return "0x"+((Hex)num).ToString();
-        }
+
     }
 }

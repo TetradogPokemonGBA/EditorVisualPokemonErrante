@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Preview script XSE" Height="298.611" Width="334.722" ResizeMode="CanMinimize">
+        Title="Preview script XSE" Height="307.916" Width="349.103" ResizeMode="CanMinimize" WindowStyle="ToolWindow">
 
     <Grid>
         <Grid.ColumnDefinitions>

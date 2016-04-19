@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EditorVisualPokemonErrante"
         mc:Ignorable="d"
-        Title="Previsualizar Script Hex" Height="298.611" Width="334.722" ResizeMode="CanMinimize">
+        Title="Previsualizar Script Hex" Height="298.611" Width="334.722" ResizeMode="CanMinimize" WindowStyle="ToolWindow">
 
     <Grid>
         <Grid.ColumnDefinitions>

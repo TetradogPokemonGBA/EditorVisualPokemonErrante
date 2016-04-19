@@ -44,9 +44,13 @@ namespace EditorVisualPokemonErrante
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static  readonly string VariableEspecialE = ((Hex)(int)VariablesEsmeralda.Special).ByteString, VariableEspecialR = ((Hex)(int)VariablesRojoFuego.Special).ByteString;
+        public static readonly string VariablePokemonE = ((Hex)(int)VariablesEsmeralda.Pokemon).ByteString, VariablePokemonR = ((Hex)(int)VariablesRojoFuego.Pokemon).ByteString;
+        public static readonly string VariableNivelYEstadoE = ((Hex)(int)VariablesEsmeralda.NivelYEstado).ByteString, VariableNivelYEstadoR = ((Hex)(int)VariablesRojoFuego.NivelYEstado).ByteString;
+        public static readonly string VariableVitalidadE = ((Hex)(int)VariablesEsmeralda.Vitalidad).ByteString, VariableVitalidadR = ((Hex)(int)VariablesRojoFuego.Vitalidad).ByteString;
         //Busca los pointers 58 6C 46 08 en FR, o 04 1A 5D 08 en esmeralda // A00000 -> 00 00 A0 08
         static Gabriel.Cat.GBA.RomPokemon juego;
-        static event EventHandler JuegoUpdated;
+        internal static event EventHandler JuegoUpdated;
         Gabriel.Cat.Wpf.SwitchImg[] estados;
         Pokemon[] pokemons;
         private readonly int MAXNIVEL = 100;
@@ -110,9 +114,22 @@ namespace EditorVisualPokemonErrante
             uniGridEstados.Children.AddRange(estados.SubArray(1));
             gridImgDor.Children.Add(estados[0]);
             JuegoUpdated += (s, e) => {
-                if (IsEsmeralda.Value)
+                if (MainWindow.Juego == null)
+                {
+                    Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.White);
+                    imgIcoJuego.SetImage(new Bitmap(1, 1));
+                }
+                else if (IsEsmeralda.Value)
+                {
+                   
+                    Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Black);
                     imgIcoJuego.SetImage(Resource1.Emerald);
-                else imgIcoJuego.SetImage(Resource1.FireRed);
+                }
+                else
+                {
+                    Background =new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Red);
+                    imgIcoJuego.SetImage(Resource1.FireRed);
+                }
             };
 
         }
@@ -137,6 +154,7 @@ namespace EditorVisualPokemonErrante
             }
             return (Hex)Juego.ArchivoGbaPokemon[Juego.Version == Gabriel.Cat.GBA.RomPokemon.ESMERALDA ? (int)VariablesEsmeralda.RutinaOffset1 : (int)VariablesRojoFuego.RutinaOffset1];
         }
+
         private void exportarFRXSE_Click(object sender, RoutedEventArgs e)
         {
             ExportarXSE("FR", PreviewScripXSE().txtScriptR.Text);
@@ -274,6 +292,23 @@ namespace EditorVisualPokemonErrante
             ValidarNiveYVida();
             new AplicarEnLaRom(((Pokemon)cmbPokemons.SelectedItem).NumeroNacional, Convert.ToInt32(txtVidaQueTiene.Text), Convert.ToByte(txtNivel.Text), SumaStatus()).Show();
         }
-
+        public static void PonNumeroFilasRom(byte numFilas)
+        {
+            if (IsEsmeralda.HasValue)
+            {
+                if (IsEsmeralda.Value)
+                {
+                    Juego.ArchivoGbaPokemon[(long)VariablesEsmeralda.RutinaOffset1] = numFilas;
+                    Juego.ArchivoGbaPokemon[(long)VariablesEsmeralda.RutinaOffset2] = numFilas;
+                    Juego.ArchivoGbaPokemon[(long)VariablesEsmeralda.RutinaOffset3] = --numFilas;
+                }
+                else
+                {
+                    Juego.ArchivoGbaPokemon[(long)VariablesRojoFuego.RutinaOffset1] = numFilas;
+                    Juego.ArchivoGbaPokemon[(long)VariablesRojoFuego.RutinaOffset2] = numFilas;
+                    Juego.ArchivoGbaPokemon[(long)VariablesRojoFuego.RutinaOffset3] = --numFilas;
+                }
+            }
+        }
     }
 }
