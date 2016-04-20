@@ -80,7 +80,7 @@ namespace EditorVisualPokemonErrante
              */
         public MainWindow()
         {
-            
+            MenuItem cargar= new MenuItem() { Header="Cargar Juego"};
             string[] pokemosString = Resource1.pokedexHoenn.Split('\n');
             string[] camposPkm;
             Bitmap gifPkm;
@@ -131,8 +131,42 @@ namespace EditorVisualPokemonErrante
                     imgIcoJuego.SetImage(Resource1.FireRed);
                 }
             };
-
+            imgIcoJuego.MouseLeftButtonUp += (s, e) => PideJuego();
+            grid.ContextMenu = new ContextMenu();
+            grid.ContextMenu.Items.Add(cargar);
+            cargar.Click += (s, e) => PideJuego();
+            PideJuego();
         }
+
+        public static void PideSiNoEstaElJuego()
+        {
+            if (Juego == null)
+                PideJuego();
+        }
+
+        public static void PideJuego()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            bool? open = openFileDialog.ShowDialog();
+            if (open.HasValue && open.Value)
+            {
+                MainWindow.Juego = new Gabriel.Cat.GBA.RomPokemon(new FileInfo(openFileDialog.FileName));
+                if (MainWindow.Juego.Version != Gabriel.Cat.GBA.RomPokemon.ESMERALDA&&MainWindow.Juego.Version!=Gabriel.Cat.GBA.RomPokemon.ROJOFUEGO)
+                {
+                    MainWindow.Juego = null;
+                    MessageBox.Show("La ROM no es compatible");
+                }
+            }
+            else
+            {
+                //   MainWindow.Juego = null;
+                if (MainWindow.Juego == null)
+                    MessageBox.Show("No se ha cargado ninguna ROM");
+                else
+                    MessageBox.Show("Se queda la anterior ROM");
+            }
+        }
+
         public static Gabriel.Cat.GBA.RomPokemon Juego
         {
             get { return juego; }
@@ -262,6 +296,7 @@ namespace EditorVisualPokemonErrante
                     estadoFin += (Int16)estados[i].Tag;
             return Convert.ToByte(estadoFin);
         }
+
         private void txtVidaQueTiene_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             bool incorrecto = true;
@@ -289,8 +324,12 @@ namespace EditorVisualPokemonErrante
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            ValidarNiveYVida();
-            new AplicarEnLaRom(((Pokemon)cmbPokemons.SelectedItem).NumeroNacional, Convert.ToInt32(txtVidaQueTiene.Text), Convert.ToByte(txtNivel.Text), SumaStatus()).Show();
+            PideSiNoEstaElJuego();
+            if (Juego != null)
+            {
+                ValidarNiveYVida();
+                new AplicarEnLaRom(((Pokemon)cmbPokemons.SelectedItem).NumeroNacional, Convert.ToInt32(txtVidaQueTiene.Text), Convert.ToByte(txtNivel.Text), SumaStatus()).Show();
+            }
         }
         public static void PonNumeroFilasRom(byte numFilas)
         {

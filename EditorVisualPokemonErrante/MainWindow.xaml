@@ -8,7 +8,7 @@
         xmlns:winForms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
         mc:Ignorable="d" 
         Title="Editor Visual Pokemon Errante  by pikachu240, investigado by Razhier" Height="350" Width="525" ResizeMode="CanMinimize" WindowStyle="ToolWindow">
-    <Grid>
+    <Grid x:Name="grid">
         <Grid.RowDefinitions>
             <RowDefinition Height="7*"/>
             <RowDefinition Height="102*"/>

@@ -5,16 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EditorVisualPokemonErrante"
         mc:Ignorable="d"
-        Title="Aplicar cambios en el Juego" Height="177.643" Width="233.214" ResizeMode="CanMinimize" WindowStyle="ToolWindow">
-    <StackPanel >
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="33*"/>
-                <ColumnDefinition Width="20*"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock x:Name="txtNombreArchivo" Text=""/>
-            <Button Grid.Column="1" x:Name="btnCargarJuego" Content="Cargar juego" Click="btnCargarJuego_Click"/>
-        </Grid>
+        Title="Aplicar cambios en el Juego" Height="154.572" Width="233.214" ResizeMode="CanMinimize" WindowStyle="ToolWindow">
+    <StackPanel>
+
         <Grid  x:Name="grid" Height="102">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
