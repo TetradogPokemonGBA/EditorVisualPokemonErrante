@@ -34,6 +34,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>iconoPokemonErrante.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Gabriel.Cat.Binaris, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -1350,6 +1353,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="imagenes\Estados Blanco y Negro\Quemado-Off.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="iconoPokemonErrante.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
