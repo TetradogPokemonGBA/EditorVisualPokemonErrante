@@ -44,7 +44,7 @@ namespace EditorVisualPokemonErrante
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static  readonly string VariableEspecialE = ((Hex)(int)VariablesEsmeralda.Special).ByteString, VariableEspecialR = ((Hex)(int)VariablesRojoFuego.Special).ByteString;
+        public static readonly string VariableEspecialE = ((Hex)(int)VariablesEsmeralda.Special).ByteString, VariableEspecialR = ((Hex)(int)VariablesRojoFuego.Special).ByteString;
         public static readonly string VariablePokemonE = ((Hex)(int)VariablesEsmeralda.Pokemon).ByteString, VariablePokemonR = ((Hex)(int)VariablesRojoFuego.Pokemon).ByteString;
         public static readonly string VariableNivelYEstadoE = ((Hex)(int)VariablesEsmeralda.NivelYEstado).ByteString, VariableNivelYEstadoR = ((Hex)(int)VariablesRojoFuego.NivelYEstado).ByteString;
         public static readonly string VariableVitalidadE = ((Hex)(int)VariablesEsmeralda.Vitalidad).ByteString, VariableVitalidadR = ((Hex)(int)VariablesRojoFuego.Vitalidad).ByteString;
@@ -114,7 +114,8 @@ namespace EditorVisualPokemonErrante
             cmbPokemons.SelectedIndex = 0;
             uniGridEstados.Children.AddRange(estados.SubArray(1));
             gridImgDor.Children.Add(estados[0]);
-            JuegoUpdated += (s, e) => {
+            JuegoUpdated += (s, e) =>
+            {
                 if (MainWindow.Juego == null)
                 {
                     Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.White);
@@ -122,13 +123,13 @@ namespace EditorVisualPokemonErrante
                 }
                 else if (IsEsmeralda.Value)
                 {
-                   
+
                     Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Black);
                     imgIcoJuego.SetImage(Resource1.Emerald);
                 }
                 else
                 {
-                    Background =new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Red);
+                    Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Red);
                     imgIcoJuego.SetImage(Resource1.FireRed);
                 }
             };
@@ -152,35 +153,48 @@ namespace EditorVisualPokemonErrante
             Gabriel.Cat.GBA.RomPokemon romCargada;
             OpenFileDialog openFileDialog = new OpenFileDialog();
             bool? open = openFileDialog.ShowDialog();
-            if (open.HasValue && open.Value)
+            try
             {
-                romCargada = new Gabriel.Cat.GBA.RomPokemon(new FileInfo(openFileDialog.FileName));
-                if (romCargada.Version!= Gabriel.Cat.GBA.RomPokemon.ESMERALDA&& romCargada.Version!=Gabriel.Cat.GBA.RomPokemon.ROJOFUEGO)
+                if (open.HasValue && open.Value)
                 {
-                    MessageBox.Show("La ROM no es compatible");
-                    if(MainWindow.Juego!=null)
-                        MessageBox.Show("ROM no cambiada!");
-                }
-                else
-                {
-                    MainWindow.Juego = romCargada;
+                    romCargada = new Gabriel.Cat.GBA.RomPokemon(new FileInfo(openFileDialog.FileName));
+                    if (romCargada.Version != Gabriel.Cat.GBA.RomPokemon.ESMERALDA && romCargada.Version != Gabriel.Cat.GBA.RomPokemon.ROJOFUEGO)
+                    {
+                        MessageBox.Show("La ROM no es compatible");
+                        if (MainWindow.Juego != null)
+                            MessageBox.Show("ROM no cambiada!");
+                    }
+                    else
+                    {
+                        MainWindow.Juego = romCargada;
 
+                    }
+                }
+                else
+                {
+                    //   MainWindow.Juego = null;
+                    if (MainWindow.Juego == null)
+                        MessageBox.Show("No se ha cargado ninguna ROM");
+                    else
+                        MessageBox.Show("Se queda la anterior ROM");
                 }
             }
-            else
-            {
-                //   MainWindow.Juego = null;
-                if (MainWindow.Juego == null)
-                    MessageBox.Show("No se ha cargado ninguna ROM");
-                else
-                    MessageBox.Show("Se queda la anterior ROM");
-            }
+            catch { MessageBox.Show("El archivo esta ocupado por otro programa, cierrelo y vuelve a intentarlo"); }
         }
 
         public static Gabriel.Cat.GBA.RomPokemon Juego
         {
             get { return juego; }
-            set { juego = value; if(JuegoUpdated!=null) JuegoUpdated(null,null); }
+            set { juego = value; if (JuegoUpdated != null) JuegoUpdated(null, null); }
+        }
+        public static void SaveJuego()
+        {
+
+            if (MainWindow.Juego != null && MainWindow.Juego.SePuedeModificar)
+                MainWindow.Juego.Save();
+            else
+                MessageBox.Show("No se ha podido modificar el juego, debes de tener algun programa que lo usa!");
+
         }
         public static bool? IsEsmeralda
         {
@@ -192,9 +206,9 @@ namespace EditorVisualPokemonErrante
         }
         public int NumeroFilasRom()
         {
-            if(Juego==null)
+            if (Juego == null)
             {
-                throw new NullReferenceException();   
+                throw new NullReferenceException();
             }
             return (Hex)Juego.ArchivoGbaPokemon[Juego.Version == Gabriel.Cat.GBA.RomPokemon.ESMERALDA ? (int)VariablesEsmeralda.RutinaOffset1 : (int)VariablesRojoFuego.RutinaOffset1];
         }
@@ -211,7 +225,7 @@ namespace EditorVisualPokemonErrante
         }
         private void ExportarXSE(string version, string script)
         {
-            string path = GenerarNombreScript()+"-" + version + ".rbc";
+            string path = GenerarNombreScript() + "-" + version + ".rbc";
             FileStream fs = new FileStream(path, FileMode.Create);
             StreamWriter sw = new StreamWriter(fs);
             sw.Write(script);

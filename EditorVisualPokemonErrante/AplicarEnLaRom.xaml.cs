@@ -110,9 +110,18 @@ namespace EditorVisualPokemonErrante
 
         private void PonBytes()
         {
-          for (int i = (Hex)txtOffset.Text, f = i + bytesScript.Length, pos = 0; i < f; i++, pos++)
-              MainWindow.Juego.ArchivoGbaPokemon[i] = bytesScript[pos];
-          MainWindow.Juego.Save();          
+            if (MainWindow.Juego.SePuedeModificar)
+            {
+                for (int i = (Hex)txtOffset.Text, f = i + bytesScript.Length, pos = 0; i < f; i++, pos++)
+                    MainWindow.Juego.ArchivoGbaPokemon[i] = bytesScript[pos];
+                MainWindow.SaveJuego();
+            }
+            else
+            {
+                txtOffset.Text = "";
+                MessageBox.Show("No se puede modificar la ROM, mira si hay algun programa que lo use y cirralo");
+            }
+  
         }
 
         public static byte[] GetBytes(string scriptByte)
