@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EditorVisualPokemonErrante"
         mc:Ignorable="d"
-        Title="Aplicar cambios en el Juego" Height="154.572" Width="233.214" ResizeMode="CanMinimize" WindowStyle="ToolWindow">
-    <StackPanel>
+        Height="154.572" Width="232.214" ResizeMode="CanMinimize" WindowStyle="ToolWindow" WindowStartupLocation="Manual">
+    <StackPanel x:Name="stkPanel">
 
         <Grid  x:Name="grid" Height="102">
             <Grid.ColumnDefinitions>
@@ -14,17 +14,20 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <TextBox x:Name="txtByteScript" IsReadOnly="True"  BorderBrush="Transparent" Margin="10,15,0,0"/>
+
             <Image Grid.Column="1" x:Name="imgVersionGame" Margin="25,31,0,-1" />
         </Grid>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="52*"/>
-                <ColumnDefinition Width="65*"/>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="62*"/>
                 <ColumnDefinition Width="75*"/>
+                <ColumnDefinition Width="84*"/>
+                <ColumnDefinition Width="7*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="Offset     0x"/>
-            <TextBox Grid.Column="1" x:Name="txtOffset" Text=""/>
-            <Button Grid.Column="2" x:Name="btnBuscarEspacioLibre" Content="Aplicar" Click="btnAplicarEnJuego_Click"/>
+            <TextBlock Grid.Column="1" Text="Offset  0x" Background="White"/>
+            <TextBox Grid.Column="2" x:Name="txtOffset" Text=""/>
+            <Button Grid.Column="3" x:Name="btnBuscarEspacioLibre" Content="Aplicar" Click="btnAplicarEnJuego_Click" Background="White"/>
         </Grid>
 
     </StackPanel>

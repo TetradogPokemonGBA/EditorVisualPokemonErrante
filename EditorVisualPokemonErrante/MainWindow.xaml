@@ -6,16 +6,18 @@
         xmlns:local="clr-namespace:EditorVisualPokemonErrante"
         xmlns:wfi="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
         xmlns:winForms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        xmlns:wpf="clr-namespace:Gabriel.Cat.Wpf;assembly=Gabriel.Cat.Wpf"
         mc:Ignorable="d" 
-        Title="Editor Visual Pokemon Errante  by pikachu240, investigado by Razhier" Height="350" Width="525" ResizeMode="CanMinimize" WindowStyle="ToolWindow">
-    <Grid x:Name="grid">
+        Title="Editor Visual Pokemon Errante  by pikachu240, investigado by Razhier" Height="350" Width="525" ResizeMode="CanMinimize" WindowStartupLocation="Manual" >
+    <Grid  x:Name="grid">
         <Grid.RowDefinitions>
             <RowDefinition Height="7*"/>
             <RowDefinition Height="102*"/>
         </Grid.RowDefinitions>
-<Image Grid.Row="0" x:Name="imgIcoJuego" HorizontalAlignment="Left" Width="21" />
-        <TabControl Grid.Row="1" x:Name="tab">
-            
+        <Image Grid.Row="0" x:Name="imgIcoJuego" HorizontalAlignment="Left" Width="21" />
+        <!--  <Button Grid.Row="0" x:Name="btnCerrar" Background="Transparent" HorizontalAlignment="Right" Width="13" RenderTransformOrigin="0.455,-0.699" Margin="0,3,2,5"/>-->
+        <TabControl Grid.Row="1" x:Name="tab" Background="White">
+
             <TabItem Header="Pokemon Errante" >
                 <!--Zona para crear el scrip y poderlo poner en una rom escogida i/o poderlo guardar en formato XSE estaria poder tambien importar aunque parece mas dificil aunque si se exporta como bytes y se importa luego es igual :D es mio-->
                 <Grid>
@@ -101,10 +103,7 @@
                         <MenuItem Header="Importar">
                             <MenuItem x:Name="importarEVPE" Header="EVPEP1" Click="importarEVPE_Click" />
                         </MenuItem>
-                        <MenuItem Header="Previsualizar">
-                            <MenuItem x:Name="previsualizacionXSE"  Header="texto XSE" Click="previsualizacionXSE_Click"/>
-                            <MenuItem x:Name="previsualizacionHex" Header="byte Hex" Click="previsualizacionHex_Click"/>
-                        </MenuItem>
+                        <MenuItem Header="Previsualizar" Click="previsualizacionXSE_Click"/>
                         <MenuItem Header="Aplicar en la rom" Click="MenuItem_Click" />
                         <ComboBox x:Name="cmbPokemons" Width="165" SelectionChanged="cmbPokemons_SelectionChanged" IsTextSearchEnabled="True" IsEditable="True"/>
                     </Menu>

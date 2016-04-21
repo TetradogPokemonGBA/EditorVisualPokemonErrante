@@ -80,7 +80,7 @@ namespace EditorVisualPokemonErrante
              */
         public MainWindow()
         {
-            MenuItem cargar= new MenuItem() { Header="Cargar Juego"};
+            MenuItem cargar = new MenuItem() { Header = "Cargar Juego" }, backup = new MenuItem() { Header = "Hacer BackUp" };
             string[] pokemosString = Resource1.pokedexHoenn.Split('\n');
             string[] camposPkm;
             Bitmap gifPkm;
@@ -88,6 +88,7 @@ namespace EditorVisualPokemonErrante
             Estados[] enumEstados = (Estados[])Enum.GetValues(typeof(Estados));
             estados = new Gabriel.Cat.Wpf.SwitchImg[enumEstados.Length];
             InitializeComponent();
+
             this.imgPokemon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             estados[0] = new Gabriel.Cat.Wpf.SwitchImg(Resource1.Dormido, Resource1.Dormido_Off) { Tag = (short)Estados.Dormido, CambiarHaciendoClick = false };
             estados[1] = new Gabriel.Cat.Wpf.SwitchImg(Resource1.Envenenado, Resource1.Envenenado_Off) { Tag = (short)Estados.Envenenado };
@@ -134,7 +135,9 @@ namespace EditorVisualPokemonErrante
             imgIcoJuego.MouseLeftButtonUp += (s, e) => PideJuego();
             grid.ContextMenu = new ContextMenu();
             grid.ContextMenu.Items.Add(cargar);
+            grid.ContextMenu.Items.Add(backup);
             cargar.Click += (s, e) => PideJuego();
+            backup.Click += (s, e) => { if (MainWindow.Juego != null) MainWindow.Juego.BackUp(); };
             PideJuego();
         }
 
@@ -146,15 +149,22 @@ namespace EditorVisualPokemonErrante
 
         public static void PideJuego()
         {
+            Gabriel.Cat.GBA.RomPokemon romCargada;
             OpenFileDialog openFileDialog = new OpenFileDialog();
             bool? open = openFileDialog.ShowDialog();
             if (open.HasValue && open.Value)
             {
-                MainWindow.Juego = new Gabriel.Cat.GBA.RomPokemon(new FileInfo(openFileDialog.FileName));
-                if (MainWindow.Juego.Version != Gabriel.Cat.GBA.RomPokemon.ESMERALDA&&MainWindow.Juego.Version!=Gabriel.Cat.GBA.RomPokemon.ROJOFUEGO)
+                romCargada = new Gabriel.Cat.GBA.RomPokemon(new FileInfo(openFileDialog.FileName));
+                if (romCargada.Version!= Gabriel.Cat.GBA.RomPokemon.ESMERALDA&& romCargada.Version!=Gabriel.Cat.GBA.RomPokemon.ROJOFUEGO)
                 {
-                    MainWindow.Juego = null;
                     MessageBox.Show("La ROM no es compatible");
+                    if(MainWindow.Juego!=null)
+                        MessageBox.Show("ROM no cambiada!");
+                }
+                else
+                {
+                    MainWindow.Juego = romCargada;
+
                 }
             }
             else
@@ -331,7 +341,7 @@ namespace EditorVisualPokemonErrante
                 new AplicarEnLaRom(((Pokemon)cmbPokemons.SelectedItem).NumeroNacional, Convert.ToInt32(txtVidaQueTiene.Text), Convert.ToByte(txtNivel.Text), SumaStatus()).Show();
             }
         }
-        public static void PonNumeroFilasRom(byte numFilas)
+        public static void PonNumeroFilasRutinaRom(byte numFilas)
         {
             if (IsEsmeralda.HasValue)
             {

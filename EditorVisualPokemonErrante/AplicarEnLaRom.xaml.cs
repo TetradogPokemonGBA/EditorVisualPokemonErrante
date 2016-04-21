@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Gabriel.Cat.Binaris;
 using System.Drawing;
+using System.Windows.Media.Effects;
 
 namespace EditorVisualPokemonErrante
 {
@@ -33,6 +34,8 @@ namespace EditorVisualPokemonErrante
         private const int BYTEEMPTY = 0xFF;
         byte[] bytesScript;
         private static readonly byte[] bytesEmpty;
+         
+
         static AplicarEnLaRom()
         {
             bytesEmpty = new byte[LENGTHSCRIPT];
@@ -41,17 +44,37 @@ namespace EditorVisualPokemonErrante
         }
         public AplicarEnLaRom(int pokemon, int vida, byte nivel, byte stat)
         {
-            MenuItem cargar = new MenuItem() { Header = "Cargar" };
+            
+            MenuItem cargar = new MenuItem() { Header = "Cargar" }, backup = new MenuItem() { Header = "Hacer BackUp" },quitarScript=new MenuItem() { Header="Quitar script"};
+            int direccion;
             this.pokemon = pokemon;
             this.vida = vida;
             this.nivel = nivel;
             this.stat = stat;
             InitializeComponent();
+            this.stkPanel.MouseLeftButtonDown += (s, e) => { try { this.DragMove(); } catch { } };
             PonSiEstaElJuego();
             MainWindow.JuegoUpdated += (s, e) => PonSiEstaElJuego();
             grid.ContextMenu = new ContextMenu();
             grid.ContextMenu.Items.Add(cargar);
+            grid.ContextMenu.Items.Add(backup);
+            grid.ContextMenu.Items.Add(quitarScript);
             cargar.Click += (s, e) =>MainWindow.PideJuego();
+            backup.Click += (s, e) => { if (MainWindow.Juego != null) MainWindow.Juego.BackUp(); };
+            quitarScript.Click += (s, e) => {
+                if (MainWindow.Juego != null)
+                {
+                    direccion = MainWindow.Juego.ArchivoGbaPokemon.IndexOf(bytesScript);
+                    if (direccion>0)
+                    {
+                        for (int i = direccion, j = 0; j < bytesScript.Length; i++, j++)
+                            MainWindow.Juego.ArchivoGbaPokemon[i] = BYTEEMPTY;
+                        MainWindow.Juego.Save();
+                        txtOffset.Text = "";
+                    }else { MessageBox.Show("El script no esta en la rom"); }
+                }
+                    };
+
         }
 
         private void btnAplicarEnJuego_Click(object sender, RoutedEventArgs e)
@@ -137,24 +160,34 @@ namespace EditorVisualPokemonErrante
                 {
                     imgVersionGame.SetImage(Resource1.Emerald);
                     grid.Background = new SolidColorBrush(Colors.Black);
+                    Background = new SolidColorBrush(Colors.Black);
                 }
                 else
                 {
                     imgVersionGame.SetImage(Resource1.FireRed);
                     grid.Background = new SolidColorBrush(Colors.Red);
+                    Background = new SolidColorBrush(Colors.Red);
                 }
             }
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
         private void PonSiEstaElJuego()
         {
-
+            int direccion;
             if (MainWindow.Juego != null)
             {
                 txtByteScript.Text = AplicarEnLaRom.BytesScript(MainWindow.IsEsmeralda.Value, pokemon, vida, nivel, stat);
                 txtOffset.Text = "";
 
                 bytesScript = GetBytes(txtByteScript.Text);
+                direccion = MainWindow.Juego.ArchivoGbaPokemon.IndexOf(bytesScript);
+                if (direccion > 0)
+                    txtOffset.Text = (Hex)direccion;
                 PonImagen();
             }
             else
@@ -169,16 +202,16 @@ namespace EditorVisualPokemonErrante
             string script, variableQueToca, stringQueToca;
             stringQueToca = isEsmeralda ? MainWindow.VariableEspecialE.Split('x')[1] : MainWindow.VariableEspecialR.Split('x')[1];
             stringQueToca = stringQueToca.PadLeft(4, '0');
-            script = "25 " + stringQueToca.Substring(0, 2) + " " + stringQueToca.Substring(2, 2);
+            script = "25 " + stringQueToca.Substring(2, 2) + " " + stringQueToca.Substring(0, 2);
             stringQueToca = isEsmeralda ? MainWindow.VariablePokemonE.Split('x')[1] : MainWindow.VariablePokemonR.Split('x')[1];
             variableQueToca = ((Hex)pokemon).Number.PadLeft(4, '0');
-            script += "\r\n16 " + stringQueToca.Substring(0, 2) + " " + stringQueToca.Substring(2, 2) + " " + variableQueToca.Substring(0, 2) + " " + variableQueToca.Substring(2, 2);
-            stringQueToca = isEsmeralda ? MainWindow.VariableVitalidadE.Split('x')[1] : MainWindow.VariableVitalidadE.Split('x')[1];
+            script += "\r\n16 " + stringQueToca.Substring(2, 2) + " " + stringQueToca.Substring(0, 2) + " " + variableQueToca.Substring(2, 2) + " " + variableQueToca.Substring(0, 2);
+            stringQueToca = isEsmeralda ? MainWindow.VariableVitalidadE.Split('x')[1] : MainWindow.VariableVitalidadR.Split('x')[1];
             variableQueToca = ((Hex)vida).Number.PadLeft(4, '0');
-            script += "\r\n16 " + stringQueToca.Substring(0, 2) + " " + stringQueToca.Substring(2, 2) + " " + variableQueToca.Substring(0, 2) + " " + variableQueToca.Substring(2, 2);
+            script += "\r\n16 " + stringQueToca.Substring(2, 2) + " " + stringQueToca.Substring(0, 2) + " " + variableQueToca.Substring(2, 2) + " " + variableQueToca.Substring(0, 2);
             stringQueToca = isEsmeralda ? MainWindow.VariableNivelYEstadoE.Split('x')[1] : MainWindow.VariableNivelYEstadoR.Split('x')[1];
-            script += "\r\n16 " + stringQueToca.Substring(0, 2) + " " + stringQueToca.Substring(2, 2) + " " + ((Hex)stat).Number.PadLeft(2, '0') + " " + ((Hex)nivel).Number.PadLeft(2, '0');
-            script += "\r\nFF";
+            script += "\r\n16 " + stringQueToca.Substring(2, 2) + " " + stringQueToca.Substring(0, 2) + " " + ((Hex)nivel).Number.PadLeft(2, '0') + " " + ((Hex)stat).Number.PadLeft(2, '0');
+            script += "\r\n02 "+(isEsmeralda?"00":"FF");
             return script;
         }
     }
