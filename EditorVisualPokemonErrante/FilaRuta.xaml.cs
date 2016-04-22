@@ -62,7 +62,7 @@ namespace EditorVisualPokemonErrante
             if (columnas.Length > campos.Length)
                 throw new ArgumentOutOfRangeException("el numero de columnas es mas grande que la cantidad de campos!");
             for (int i = 0; i < columnas.Length; i++)
-                campos[i].Text = (Hex)columnas[i];
+                campos[i].Text = (Hex)(int)columnas[i];
 
         }
 

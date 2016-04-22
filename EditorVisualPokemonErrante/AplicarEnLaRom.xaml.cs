@@ -38,7 +38,7 @@ namespace EditorVisualPokemonErrante
         {
             
             MenuItem cargar = new MenuItem() { Header = "Cargar" }, backup = new MenuItem() { Header = "Hacer BackUp" },quitarScript=new MenuItem() { Header="Quitar script"};
-            int direccion;
+            uint direccion;
             this.pokemon = pokemon;
             this.vida = vida;
             this.nivel = nivel;
@@ -56,7 +56,7 @@ namespace EditorVisualPokemonErrante
             quitarScript.Click += (s, e) => {
                 if (MainWindow.Juego != null)
                 {
-                    direccion = MainWindow.Juego.ArchivoGbaPokemon.IndexOf(bytesScript);
+                    direccion =Convert.ToUInt32(MainWindow.Juego.ArchivoGbaPokemon.IndexOf(bytesScript));
                     if (direccion>0)
                     {
                         MainWindow.Juego.QuitarBytes(direccion, LENGTHSCRIPT);
@@ -120,7 +120,7 @@ namespace EditorVisualPokemonErrante
             EliminarEspacios();
             if (txtOffset.Text != "" && Hex.ValidaString(txtOffset.Text))
             {
-                valida = MainWindow.Juego.ValidaDireccion((Hex)txtByteScript.Text, bytesScript.Length);
+                valida = MainWindow.Juego.ValidaDireccion((uint)(Hex)txtByteScript.Text,Convert.ToUInt32(bytesScript.Length));
             }
             else valida = false;
             return valida;
