@@ -33,15 +33,7 @@ namespace EditorVisualPokemonErrante
         private const int INICIO = 0x800000;
         private const int BYTEEMPTY = 0xFF;
         byte[] bytesScript;
-        private static readonly byte[] bytesEmpty;
-         
 
-        static AplicarEnLaRom()
-        {
-            bytesEmpty = new byte[LENGTHSCRIPT];
-            for (int i = 0; i < bytesEmpty.Length; i++)
-                bytesEmpty[i] = BYTEEMPTY;
-        }
         public AplicarEnLaRom(int pokemon, int vida, byte nivel, byte stat)
         {
             
@@ -67,8 +59,7 @@ namespace EditorVisualPokemonErrante
                     direccion = MainWindow.Juego.ArchivoGbaPokemon.IndexOf(bytesScript);
                     if (direccion>0)
                     {
-                        for (int i = direccion, j = 0; j < bytesScript.Length; i++, j++)
-                            MainWindow.Juego.ArchivoGbaPokemon[i] = BYTEEMPTY;
+                        MainWindow.Juego.QuitarBytes(direccion, LENGTHSCRIPT);
                         MainWindow.Juego.Save();
                         txtOffset.Text = "";
                     }else { MessageBox.Show("El script no esta en la rom"); }
@@ -86,7 +77,7 @@ namespace EditorVisualPokemonErrante
             }
             else
             {
-                direccion = MainWindow.Juego.ArchivoGbaPokemon.IndexOf(bytesScript);
+                direccion = MainWindow.Juego.DireccionBytes(0,bytesScript);
                 if (direccion < 0)
                 {
                     PonDireccionCorrecta();
@@ -96,7 +87,7 @@ namespace EditorVisualPokemonErrante
                 else
                 {
                     txtOffset.Text = (Hex)direccion;
-                    MessageBox.Show("El scritp ja esta en la ROM!");
+                    MessageBox.Show("El scritp ya esta en la ROM!");
                 }
             }
 
@@ -105,15 +96,14 @@ namespace EditorVisualPokemonErrante
         private void PonDireccionCorrecta()
         {
            if(!ValidaLugarDondeSePondra())
-                txtOffset.Text = (Hex)MainWindow.Juego.ArchivoGbaPokemon.IndexOf(INICIO,bytesEmpty);
+                txtOffset.Text = (Hex)MainWindow.Juego.DireccionEspacio(LENGTHSCRIPT, INICIO);
         }
 
         private void PonBytes()
         {
             if (MainWindow.Juego.SePuedeModificar)
             {
-                for (int i = (Hex)txtOffset.Text, f = i + bytesScript.Length, pos = 0; i < f; i++, pos++)
-                    MainWindow.Juego.ArchivoGbaPokemon[i] = bytesScript[pos];
+                MainWindow.Juego.PonBytes((Hex)txtOffset.Text, bytesScript);
                 MainWindow.SaveJuego();
             }
             else
@@ -124,30 +114,13 @@ namespace EditorVisualPokemonErrante
   
         }
 
-        public static byte[] GetBytes(string scriptByte)
-        {
-            List<byte> bytes = new List<byte>();
-            string[] bytesString = scriptByte.Replace("\r\n", " ").Split(' ');
-            for (int i = 0; i < bytesString.Length; i++)
-                bytes.Add(Convert.ToByte((int)(Hex)bytesString[i]));
-            return bytes.ToArray();
-        }
-
         private bool ValidaLugarDondeSePondra()
         {
             bool valida;
-            Hex offSet;
             EliminarEspacios();
             if (txtOffset.Text != "" && Hex.ValidaString(txtOffset.Text))
             {
-                offSet = (Hex)txtOffset.Text;
-                valida = offSet + bytesScript.Length <= MainWindow.Juego.ArchivoGbaPokemon.Length;
-                try
-                {
-                    for (int i = offSet, j = 0; valida && j < bytesScript.Length; i++, j++)
-                        valida = MainWindow.Juego.ArchivoGbaPokemon[i] == BYTEEMPTY;
-                }
-                catch { valida = false; }//si se sale de la matriz no es valida!
+                valida = MainWindow.Juego.ValidaDireccion((Hex)txtByteScript.Text, bytesScript.Length);
             }
             else valida = false;
             return valida;
@@ -163,9 +136,9 @@ namespace EditorVisualPokemonErrante
 
         private void PonImagen()
         {
-            if (MainWindow.IsEsmeralda.HasValue)
+            if (MainWindow.Juego!=null)
             {
-                if (MainWindow.IsEsmeralda.Value)
+                if (MainWindow.Juego is Gabriel.Cat.GBA.RomEsmeralda)
                 {
                     imgVersionGame.SetImage(Resource1.Emerald);
                     grid.Background = new SolidColorBrush(Colors.Black);
@@ -190,10 +163,8 @@ namespace EditorVisualPokemonErrante
             int direccion;
             if (MainWindow.Juego != null)
             {
-                txtByteScript.Text = AplicarEnLaRom.BytesScript(MainWindow.IsEsmeralda.Value, pokemon, vida, nivel, stat);
-                txtOffset.Text = "";
-
-                bytesScript = GetBytes(txtByteScript.Text);
+                txtByteScript.Text = MainWindow.Juego.BytesScriptPokemonErranteString(pokemon, vida, nivel, stat);
+                bytesScript= MainWindow.Juego.BytesScriptPokemonErrante(pokemon, vida, nivel, stat);
                 direccion = MainWindow.Juego.ArchivoGbaPokemon.IndexOf(bytesScript);
                 if (direccion > 0)
                     txtOffset.Text = (Hex)direccion;
@@ -206,22 +177,6 @@ namespace EditorVisualPokemonErrante
             }
         }
 
-        public static string BytesScript(bool isEsmeralda, int pokemon, int vida, byte nivel, byte stat)
-        {
-            string script, variableQueToca, stringQueToca;
-            stringQueToca = isEsmeralda ? MainWindow.VariableEspecialE.Split('x')[1] : MainWindow.VariableEspecialR.Split('x')[1];
-            stringQueToca = stringQueToca.PadLeft(4, '0');
-            script = "25 " + stringQueToca.Substring(2, 2) + " " + stringQueToca.Substring(0, 2);
-            stringQueToca = isEsmeralda ? MainWindow.VariablePokemonE.Split('x')[1] : MainWindow.VariablePokemonR.Split('x')[1];
-            variableQueToca = ((Hex)pokemon).Number.PadLeft(4, '0');
-            script += "\r\n16 " + stringQueToca.Substring(2, 2) + " " + stringQueToca.Substring(0, 2) + " " + variableQueToca.Substring(2, 2) + " " + variableQueToca.Substring(0, 2);
-            stringQueToca = isEsmeralda ? MainWindow.VariableVitalidadE.Split('x')[1] : MainWindow.VariableVitalidadR.Split('x')[1];
-            variableQueToca = ((Hex)vida).Number.PadLeft(4, '0');
-            script += "\r\n16 " + stringQueToca.Substring(2, 2) + " " + stringQueToca.Substring(0, 2) + " " + variableQueToca.Substring(2, 2) + " " + variableQueToca.Substring(0, 2);
-            stringQueToca = isEsmeralda ? MainWindow.VariableNivelYEstadoE.Split('x')[1] : MainWindow.VariableNivelYEstadoR.Split('x')[1];
-            script += "\r\n16 " + stringQueToca.Substring(2, 2) + " " + stringQueToca.Substring(0, 2) + " " + ((Hex)nivel).Number.PadLeft(2, '0') + " " + ((Hex)stat).Number.PadLeft(2, '0');
-            script += "\r\n02 "+(isEsmeralda?"00":"FF");
-            return script;
-        }
+
     }
 }

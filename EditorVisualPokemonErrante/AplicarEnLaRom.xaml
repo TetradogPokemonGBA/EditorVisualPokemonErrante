@@ -10,12 +10,12 @@
 
         <Grid  x:Name="grid" Height="102">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="60*"/>
+                <ColumnDefinition Width="53*"/>
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="txtByteScript" IsReadOnly="True"  BorderBrush="Transparent" Margin="10,15,0,0"/>
+            <TextBox x:Name="txtByteScript" IsReadOnly="True"  BorderBrush="Transparent" Margin="13,10,10,5"/>
 
-            <Image Grid.Column="1" x:Name="imgVersionGame" Margin="25,31,0,-1" />
+            <Image Grid.Column="1" x:Name="imgVersionGame" Margin="25,36,0,-3" />
         </Grid>
         <Grid>
             <Grid.ColumnDefinitions>

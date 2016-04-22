@@ -15,50 +15,21 @@ namespace EditorVisualPokemonErrante
     {
         Dormido = 0, Envenenado = 8, Quemado = 16, Congelado = 32, Paralizado = 64, Envenenamiento_grave = 128
     }
-    public enum VariablesEsmeralda
-    {
-        Special = 0x12B,
-        Pokemon = 0x4F24,
-        Vitalidad = 0x4F25,
-        NivelYEstado = 0x4F26,
-        Disponible = 0x5F29,
-        //los 3bytes para poder tener la tabla  repunteada
-        RutinaOffset1 = 0x161928,
-        RutinaOffset2 = 0x1619c6,
-        RutinaOffset3 = 0x161a82,//uno menos
-    }
-    public enum VariablesRojoFuego
-    {
-        Special = 0x129,
-        Pokemon = 0x506C,
-        Vitalidad = 0x506D,
-        NivelYEstado = 0x506E,
-        Disponible = 0x5071,
-        //los 3bytes para poder tener la tabla  repunteada
-        RutinaOffset1 = 0x141d6e,
-        RutinaOffset2 = 0x141df6,
-        RutinaOffset3 = 0x141eae,//uno menos
-    }
+
     /// <summary>
     /// Lógica de interacción para MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static readonly string VariableEspecialE = ((Hex)(int)VariablesEsmeralda.Special).ByteString, VariableEspecialR = ((Hex)(int)VariablesRojoFuego.Special).ByteString;
-        public static readonly string VariablePokemonE = ((Hex)(int)VariablesEsmeralda.Pokemon).ByteString, VariablePokemonR = ((Hex)(int)VariablesRojoFuego.Pokemon).ByteString;
-        public static readonly string VariableNivelYEstadoE = ((Hex)(int)VariablesEsmeralda.NivelYEstado).ByteString, VariableNivelYEstadoR = ((Hex)(int)VariablesRojoFuego.NivelYEstado).ByteString;
-        public static readonly string VariableVitalidadE = ((Hex)(int)VariablesEsmeralda.Vitalidad).ByteString, VariableVitalidadR = ((Hex)(int)VariablesRojoFuego.Vitalidad).ByteString;
-        //Busca los pointers 58 6C 46 08 en FR, o 04 1A 5D 08 en esmeralda // A00000 -> 00 00 A0 08
+         //Busca los pointers 58 6C 46 08 en FR, o 04 1A 5D 08 en esmeralda // A0 00 00 -> 00 00 A0 08
         static Gabriel.Cat.GBA.RomPokemon juego;
         internal static event EventHandler JuegoUpdated;
         Gabriel.Cat.Wpf.SwitchImg[] estados;
         Pokemon[] pokemons;
         private readonly int MAXNIVEL = 100;
         private readonly int MAXVIDA = 65535;//por mirar de momento es el maximo con 2bytes
-        readonly char[] caracteresFinalesAdmitidosParaLocalizacion = new char[] { '0', '4', '8', 'C' };
-        readonly Hex pointerDefaultFireRed = "64C685";//por mirar si es asi
-        readonly Hex pointerDefaultEmerald = "D5A140";
-        /*
+
+            /*
          El último paso es decirle a la rutina la nueva longitud de la tabla. ¿Habéis visto que la tabla de FR mide 25 filas? 25 en hex es 19.
          Hay 3 bytes que indican el nº de filas de la tabla, aquí se indica la dirección donde se encuentran:
 
@@ -121,7 +92,7 @@ namespace EditorVisualPokemonErrante
                     Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.White);
                     imgIcoJuego.SetImage(new Bitmap(1, 1));
                 }
-                else if (IsEsmeralda.Value)
+                else if (MainWindow.Juego is Gabriel.Cat.GBA.RomEsmeralda)
                 {
 
                     Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Black);
@@ -150,14 +121,14 @@ namespace EditorVisualPokemonErrante
 
         public static void PideJuego()
         {
-            Gabriel.Cat.GBA.RomPokemon romCargada;
+            Gabriel.Cat.GBA.RomPokemon romCargada=null;
             OpenFileDialog openFileDialog = new OpenFileDialog();
             bool? open = openFileDialog.ShowDialog();
             try
             {
                 if (open.HasValue && open.Value)
                 {
-                    romCargada = new Gabriel.Cat.GBA.RomPokemon(new FileInfo(openFileDialog.FileName));
+                    romCargada = Gabriel.Cat.GBA.RomPokemon.GetRom(new FileInfo(openFileDialog.FileName));
                     if (romCargada.Version != Gabriel.Cat.GBA.RomPokemon.ESMERALDA && romCargada.Version != Gabriel.Cat.GBA.RomPokemon.ROJOFUEGO)
                     {
                         MessageBox.Show("La ROM no es compatible");
@@ -195,22 +166,6 @@ namespace EditorVisualPokemonErrante
             else
                 MessageBox.Show("No se ha podido modificar el juego, debes de tener algun programa que lo usa!");
 
-        }
-        public static bool? IsEsmeralda
-        {
-            get { return Juego != null ? Juego.Version == Gabriel.Cat.GBA.RomPokemon.ESMERALDA : new bool?(); }
-        }
-        private bool ValidadorLocalizacionTablaRutas(string numHex)
-        {
-            return this.caracteresFinalesAdmitidosParaLocalizacion.Contains(numHex[numHex.Length - 1]);
-        }
-        public int NumeroFilasRom()
-        {
-            if (Juego == null)
-            {
-                throw new NullReferenceException();
-            }
-            return (Hex)Juego.ArchivoGbaPokemon[Juego.Version == Gabriel.Cat.GBA.RomPokemon.ESMERALDA ? (int)VariablesEsmeralda.RutinaOffset1 : (int)VariablesRojoFuego.RutinaOffset1];
         }
 
         private void exportarFRXSE_Click(object sender, RoutedEventArgs e)
@@ -302,16 +257,6 @@ namespace EditorVisualPokemonErrante
             txtVidaQueTiene.Text = vida.ToString();
         }
 
-        private void previsualizacionHex_Click(object sender, RoutedEventArgs e)
-        {
-            int nivel, vida;
-            ValidarNiveYVida();
-            nivel = Convert.ToInt32(txtNivel.Text);
-            vida = Convert.ToInt32(txtVidaQueTiene.Text);
-            new PrevisualizarScriptHex((cmbPokemons.SelectedItem as Pokemon).NumeroNacional, vida, Convert.ToByte(nivel), SumaStatus()).Show();
-
-        }
-
         private byte SumaStatus()
         {
             Int16 estadoFin = 0;//pongo los turnos sleep
@@ -355,23 +300,6 @@ namespace EditorVisualPokemonErrante
                 new AplicarEnLaRom(((Pokemon)cmbPokemons.SelectedItem).NumeroNacional, Convert.ToInt32(txtVidaQueTiene.Text), Convert.ToByte(txtNivel.Text), SumaStatus()).Show();
             }
         }
-        public static void PonNumeroFilasRutinaRom(byte numFilas)
-        {
-            if (IsEsmeralda.HasValue)
-            {
-                if (IsEsmeralda.Value)
-                {
-                    Juego.ArchivoGbaPokemon[(long)VariablesEsmeralda.RutinaOffset1] = numFilas;
-                    Juego.ArchivoGbaPokemon[(long)VariablesEsmeralda.RutinaOffset2] = numFilas;
-                    Juego.ArchivoGbaPokemon[(long)VariablesEsmeralda.RutinaOffset3] = --numFilas;
-                }
-                else
-                {
-                    Juego.ArchivoGbaPokemon[(long)VariablesRojoFuego.RutinaOffset1] = numFilas;
-                    Juego.ArchivoGbaPokemon[(long)VariablesRojoFuego.RutinaOffset2] = numFilas;
-                    Juego.ArchivoGbaPokemon[(long)VariablesRojoFuego.RutinaOffset3] = --numFilas;
-                }
-            }
-        }
+
     }
 }

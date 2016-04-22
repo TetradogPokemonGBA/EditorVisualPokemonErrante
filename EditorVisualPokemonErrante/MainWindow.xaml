@@ -103,7 +103,7 @@
                         <MenuItem Header="Importar">
                             <MenuItem x:Name="importarEVPE" Header="EVPEP1" Click="importarEVPE_Click" />
                         </MenuItem>
-                        <MenuItem Header="Previsualizar" Click="previsualizacionXSE_Click"/>
+                        <MenuItem Header="Ver Script" Click="previsualizacionXSE_Click"/>
                         <MenuItem Header="Aplicar en la rom" Click="MenuItem_Click" />
                         <ComboBox x:Name="cmbPokemons" Width="165" SelectionChanged="cmbPokemons_SelectionChanged" IsTextSearchEnabled="True" IsEditable="True"/>
                     </Menu>

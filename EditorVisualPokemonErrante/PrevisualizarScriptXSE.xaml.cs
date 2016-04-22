@@ -21,7 +21,9 @@ namespace EditorVisualPokemonErrante
     /// </summary>
     public partial class PrevisualizarScriptXSE : Window
     {
-        public const string CABEZERASCRIPT = "#dynamic 0x800000\r\n#org @ScriptPokemonErrante";
+        static Gabriel.Cat.GBA.RomEsmeralda romEsmeralda = new Gabriel.Cat.GBA.RomEsmeralda();
+        static Gabriel.Cat.GBA.RomFRLG romRojoFuego = new Gabriel.Cat.GBA.RomFRLG();
+        
         public PrevisualizarScriptXSE()
         {
             InitializeComponent();
@@ -29,23 +31,11 @@ namespace EditorVisualPokemonErrante
 
         public PrevisualizarScriptXSE(int pokemon,int vida,byte nivel,byte stat):this()
         {
-            string scriptE = CABEZERASCRIPT,scriptR=CABEZERASCRIPT;
-            scriptE += "\r\nspecial " +MainWindow.VariableEspecialE;
-            scriptE += "\r\nsetvar " + MainWindow.VariablePokemonE + " " + ((Hex)pokemon).ByteString;
-            scriptE += "\r\nsetvar " + MainWindow.VariableVitalidadE + " " + ((Hex)vida).ByteString;
-            scriptE += "\r\nsetvar " + MainWindow.VariableNivelYEstadoE + " " +((Hex)stat).ByteString + ((Hex)nivel).Number;
-            scriptE += "\r\nend";
 
-            scriptR += "\r\nspecial " + MainWindow.VariableEspecialR;
-            scriptR += "\r\nsetvar " + MainWindow.VariablePokemonR + " " +((Hex)pokemon).ByteString;
-            scriptR += "\r\nsetvar " + MainWindow.VariableVitalidadR + " " + ((Hex)vida).ByteString;
-            scriptR += "\r\nsetvar " + MainWindow.VariableNivelYEstadoR + " "+((Hex)stat).ByteString + ((Hex)nivel).Number;
-            scriptR += "\r\nend";
-             
             imgVersionR.SetImage(Resource1.FireRed);
-            txtScriptR.Text = scriptR;
+            txtScriptR.Text = romRojoFuego.ScriptPokemonErrante(pokemon,vida,nivel,stat);
             imgVersionE.SetImage(Resource1.Emerald);
-            txtScriptE.Text = scriptE;
+            txtScriptE.Text = romEsmeralda.ScriptPokemonErrante(pokemon, vida, nivel, stat);
         }
 
     }

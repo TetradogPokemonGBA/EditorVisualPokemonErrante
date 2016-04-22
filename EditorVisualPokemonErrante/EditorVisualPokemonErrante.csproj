@@ -81,9 +81,6 @@
     <Compile Include="FilaRuta.xaml.cs">
       <DependentUpon>FilaRuta.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PrevisualizarScriptHex.xaml.cs">
-      <DependentUpon>PrevisualizarScriptHex.xaml</DependentUpon>
-    </Compile>
     <Compile Include="PrevisualizarScriptXSE.xaml.cs">
       <DependentUpon>PrevisualizarScriptXSE.xaml</DependentUpon>
     </Compile>
@@ -99,10 +96,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="FilaRuta.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PrevisualizarScriptHex.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
