@@ -68,10 +68,11 @@
                                     <RowDefinition Height="2*"/>
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
+                                <TextBlock Text="STATS"  FontSize="20" HorizontalAlignment="Center"/>
                                 <StackPanel Grid.Row="1" Orientation="Horizontal">
                                     <TextBlock  Text="Vida " />
                                     <TextBox x:Name="txtVidaQueTiene" PreviewTextInput="txtVidaQueTiene_PreviewTextInput" Width="110" Text="100"/>
-                                    <TextBlock x:Name="txblVidaTotalEspecie" Text="/?"/>
+                                    <TextBlock x:Name="txblVidaTotalEspecie" Text="/Total?"/>
                                 </StackPanel>
 
                             </Grid>
@@ -80,7 +81,9 @@
                                     <ColumnDefinition Width="190*"/>
                                     <ColumnDefinition Width="63*"/>
                                 </Grid.ColumnDefinitions>
-                                <Grid Grid.Column="0" x:Name="gridZTruns"/>
+                                <Grid Grid.Column="0" x:Name="gridZTruns">
+                                    <TextBox x:Name="txtZTurns" PreviewTextInput="txtZTurns_PreviewTextInput"/>
+                                </Grid>
                                 <Grid Grid.Column="1" x:Name="gridImgDor"/>
                             </Grid>
                             <UniformGrid Grid.Row="2" x:Name="uniGridEstados"/>
@@ -109,17 +112,46 @@
                     </Menu>
                 </Grid>
             </TabItem>
-            <TabItem Header="Rutas por donde aparecera" >
+            <TabItem Header="Rutas por donde aparecera" IsEnabled="False" >
                 <!--Zona donde se configuran las rutas en este caso si supera los 20 avisara que se tendra que repuntear la direccion por defecto por una nueva y que se pueda escoger por el usuario-->
                 <!--Hay que mirar el maximo de filas que es 256-->
                 <!--poder exportar el resultado para guardarlo  y poderlo importar tambien-->
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="353*"/>
+                        <ColumnDefinition Width="355*"/>
                         <ColumnDefinition Width="154*"/>
                     </Grid.ColumnDefinitions>
-                    <StackPanel Grid.Column="0" x:Name="stkPanelFilasRutas"/>
+                    <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto">
+                        <StackPanel  x:Name="stkPanelFilasRutas"/>
+                    </ScrollViewer>
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="68*"/>
+                            <RowDefinition Height="201*"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="OffSet:"/>
+                                <TextBox x:Name="txtOffsetTablaRutas"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Numero de Filas:"/>
+                                <TextBox x:Name="txtNumeroDeFilas"/>
+                            </StackPanel>
+                            <Button x:Name="btnAñadirFila" Content="Añadir Fila" Click="btnAñadirFila_Click"/>
 
+                        </StackPanel>
+                        <StackPanel Grid.Row="1">
+                            <ComboBox x:Name="cmbMapasDisponiblesRom" SelectionChanged="cmbMapas_SelectionChanged"/>
+                            <Image x:Name="imgMapaActual" Height="135"/>
+                            <CheckBox x:Name="ckQuitarHaciendoClick" Content="Quitar fila haciendo click" IsChecked="False"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Button x:Name="btnGuardar" Content="Guardar" Click="btnGuardar_Click"/>
+                                <Button x:Name="btnExportarP2" Content="Exportar" Click="btnExportarP2_Click"/>
+                                <Button x:Name="btnImportarP2" Content="Importar" Click="btnImportarP2_Click"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
                 </Grid>
             </TabItem>
         </TabControl>

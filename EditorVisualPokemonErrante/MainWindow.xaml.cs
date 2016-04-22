@@ -20,7 +20,8 @@ namespace EditorVisualPokemonErrante
     /// Lógica de interacción para MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    {
+    {//en un futuro toda la informacion se sacara de la rom!! asi es mas realista ya que son roms editadas y claro posiblemente tendran los pokemons cambiados!! por ejemplo el orden,imagen,nombre,nuevos,menos...etc..
+        //en un futuro la parte de los mapas sera con los nombres y las miniaturas ;) asi es mas visual!!
          //Busca los pointers 58 6C 46 08 en FR, o 04 1A 5D 08 en esmeralda // A0 00 00 -> 00 00 A0 08
         static Gabriel.Cat.GBA.RomPokemon juego;
         internal static event EventHandler JuegoUpdated;
@@ -103,6 +104,7 @@ namespace EditorVisualPokemonErrante
                     Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Red);
                     imgIcoJuego.SetImage(Resource1.FireRed);
                 }
+                PonRuta();
             };
             imgIcoJuego.MouseLeftButtonUp += (s, e) => PideJuego();
             grid.ContextMenu = new ContextMenu();
@@ -203,7 +205,7 @@ namespace EditorVisualPokemonErrante
         {
             scriptEVPE script;
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "EVPE script part|*.evpep1";
+            openFileDialog.Filter = "EVPE script part 1|*.evpep1";
             if (openFileDialog.ShowDialog().Value)
             {
                 script = scriptEVPE.GetScriptEVPE(new FileStream(openFileDialog.FileName, FileMode.Open));
@@ -217,6 +219,8 @@ namespace EditorVisualPokemonErrante
 
         private void CargaEstado(short estado)
         {
+            for (int i = 1; i < estados.Length; i++)
+                estados[i].EstadoOn = false;
             for (int i = estados.Length - 1; i > 0; i--)
                 if (estado - (short)estados[i].Tag >= 0)
                 {
@@ -224,6 +228,7 @@ namespace EditorVisualPokemonErrante
                     estado -= (short)estados[i].Tag;
                 }
             //me quedan los turnos sleep
+            txtZTurns.Text = estado + "";
         }
 
         private void previsualizacionXSE_Click(object sender, RoutedEventArgs e)
@@ -259,7 +264,7 @@ namespace EditorVisualPokemonErrante
 
         private byte SumaStatus()
         {
-            Int16 estadoFin = 0;//pongo los turnos sleep
+            Int16 estadoFin = txtZTurns.Text!=""?Convert.ToInt16(txtZTurns.Text):(Int16)0;//pongo los turnos sleep
             for (int i = 1; i < estados.Length; i++)
                 if (estados[i].EstadoOn)
                     estadoFin += (Int16)estados[i].Tag;
@@ -301,5 +306,88 @@ namespace EditorVisualPokemonErrante
             }
         }
 
+        private void btnAñadirFila_Click(object sender, RoutedEventArgs e)
+        {
+            FilaRuta fila;
+            if (MainWindow.Juego != null)
+            {
+                fila = new FilaRuta();
+                fila.Click += QuitarFilaClick;
+                stkPanelFilasRutas.Children.Add(fila);
+            }
+        }
+
+        private void cmbMapas_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //pongo mapa que toca
+        }
+
+        private void btnGuardar_Click(object sender, RoutedEventArgs e)
+        {
+            PideSiNoEstaElJuego();
+            if (MainWindow.Juego != null)
+            {
+                MainWindow.Juego.TablaRutasPokemonErrante = FilaRuta.ToByteMatriu(stkPanelFilasRutas.Children.Casting<FilaRuta>().ToTaula());
+                PonRutaInfo();
+            }
+           
+        }
+        private void PonRuta()
+        {
+            try
+            {
+                if (MainWindow.Juego != null)
+                {
+                    PonRutaInfo();
+                    stkPanelFilasRutas.Children.Clear();
+                    foreach (FilaRuta fila in FilaRuta.ToFilaRutaArray(MainWindow.Juego.TablaRutasPokemonErrante))
+                    {
+                        fila.Click += QuitarFilaClick;
+                        stkPanelFilasRutas.Children.Add(fila);
+                    }
+                    //pongo el cmb los mapas!!
+                }
+            }
+            catch { }//hay problemas con las rutas...
+        }
+
+        private void QuitarFilaClick(object sender, EventArgs e)
+        {
+          if (ckQuitarHaciendoClick.IsChecked.Value)
+                stkPanelFilasRutas.Children.Remove((FilaRuta)sender); 
+        }
+
+        private void PonRutaInfo()
+        {
+            if(MainWindow.Juego!=null)
+            {
+                txtOffsetTablaRutas.Text =(Hex) MainWindow.Juego.OffsetTablaPokemonErrante;
+                txtNumeroDeFilas.Text = MainWindow.Juego.NFilasRutasPokemonErrante+"";
+            }
+        }
+
+        private void btnExportarP2_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnImportarP2_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void txtZTurns_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            int numTurnos;
+            txtVidaQueTiene_PreviewTextInput(sender, e);
+            if (!e.Handled)
+            {
+                numTurnos = Convert.ToInt32(e.Text);
+                e.Handled = numTurnos > 7||numTurnos<0;
+                estados[0].EstadoOn = numTurnos>0;
+            }
+            if (e.Text == "")
+                estados[0].EstadoOn = false;
+        }
     }
 }
