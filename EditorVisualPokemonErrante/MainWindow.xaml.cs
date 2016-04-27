@@ -29,27 +29,29 @@ namespace EditorVisualPokemonErrante
         Pokemon[] pokemons;
         private readonly int MAXNIVEL = 100;
         private readonly int MAXVIDA = 65535;//por mirar de momento es el maximo con 2bytes
+        Gabriel.Cat.Wpf.SwitchImg[] imgsZ;
+        private const int MAXDORMTURNS= 8;
 
-            /*
-         El último paso es decirle a la rutina la nueva longitud de la tabla. ¿Habéis visto que la tabla de FR mide 25 filas? 25 en hex es 19.
-         Hay 3 bytes que indican el nº de filas de la tabla, aquí se indica la dirección donde se encuentran:
+        /*
+El último paso es decirle a la rutina la nueva longitud de la tabla. ¿Habéis visto que la tabla de FR mide 25 filas? 25 en hex es 19.
+Hay 3 bytes que indican el nº de filas de la tabla, aquí se indica la dirección donde se encuentran:
 
-                ESMERALDA
-                En 0x161928: 0x14'por defecto
-                En 0x1619c6: 0x14'por defecto
-                En 0x161a82: 0x13'por defecto
+ESMERALDA
+En 0x161928: 0x14'por defecto
+En 0x1619c6: 0x14'por defecto
+En 0x161a82: 0x13'por defecto
 
 
-                FIRE RED
-                En 0x141d6e: 0x19'por defecto
-                En 0x141df6: 0x19'por defecto
-                En 0x141eae: 0x18'por defecto
+FIRE RED
+En 0x141d6e: 0x19'por defecto
+En 0x141df6: 0x19'por defecto
+En 0x141eae: 0x18'por defecto
 
-        Hay que tener en cuenta que todos los números de mapa están referidos al banco 0 en esmeralda y al banco 3 en FR. Es decir, 
-        que nuestro poke sólo se podrá mover por los mapas del banco 0 en esmeralda y el banco 3 en FR. 
-        Si por algún motivo quieres que aparezca en un mapa fuera de ese banco (una cueva, una casa, la zona safari...) 
-        puedes ejecutar el siguiente script a la entrada del mapa:
-             */
+Hay que tener en cuenta que todos los números de mapa están referidos al banco 0 en esmeralda y al banco 3 en FR. Es decir, 
+que nuestro poke sólo se podrá mover por los mapas del banco 0 en esmeralda y el banco 3 en FR. 
+Si por algún motivo quieres que aparezca en un mapa fuera de ese banco (una cueva, una casa, la zona safari...) 
+puedes ejecutar el siguiente script a la entrada del mapa:
+*/
         public MainWindow()
         {
             MenuItem cargar = new MenuItem() { Header = "Cargar Juego" }, backup = new MenuItem() { Header = "Hacer BackUp" };
@@ -81,6 +83,15 @@ namespace EditorVisualPokemonErrante
                 pokemons[i].Img = gifPkm;
 
 
+            }
+            imgsZ = new Gabriel.Cat.Wpf.SwitchImg[MAXDORMTURNS];
+            for(int i=0;i<imgsZ.Length;i++)
+            {
+                imgsZ[i] = new Gabriel.Cat.Wpf.SwitchImg(Resource1.DormidoZ, Resource1.DormidoZ_Off);
+                imgsZ[i].SwitchChanged += PonSleepTurn;
+                imgsZ[i].Tag = i;
+                gridZTruns.Children.Add(imgsZ[i]);
+                Grid.SetColumn(imgsZ[i], i);
             }
             cmbPokemons.ItemsSource = pokemons.Ordena();
             cmbPokemons.SelectedIndex = 0;
@@ -115,6 +126,15 @@ namespace EditorVisualPokemonErrante
             PideJuego();
         }
 
+        private void PonSleepTurn(object sender, bool e)
+        {
+            Gabriel.Cat.Wpf.SwitchImg switchImg = sender as Gabriel.Cat.Wpf.SwitchImg;
+            imgsZ.WhileEach((img) => { img.EstadoOn = false; return true; });
+            for (int i = 0, f = (int)switchImg.Tag; i <= f; i++)
+                imgsZ[i].EstadoOn = true;
+            estados[0].EstadoOn = imgsZ[1].EstadoOn;
+        }
+
         public static void PideSiNoEstaElJuego()
         {
             if (Juego == null)
@@ -131,7 +151,7 @@ namespace EditorVisualPokemonErrante
                 if (open.HasValue && open.Value)
                 {
                     romCargada = Gabriel.Cat.GBA.RomPokemon.GetRom(new FileInfo(openFileDialog.FileName));
-                    if (romCargada.Version != Gabriel.Cat.GBA.RomPokemon.ESMERALDA && romCargada.Version != Gabriel.Cat.GBA.RomPokemon.ROJOFUEGO)
+                    if (romCargada.Version != Gabriel.Cat.GBA.RomPokemon.ESMERALDA && romCargada.Version != Gabriel.Cat.GBA.RomPokemon.ROJOFUEGO||romCargada.Idioma!=Gabriel.Cat.GBA.RomPokemon.Idiomas.Español)
                     {
                         MessageBox.Show("La ROM no es compatible");
                         if (MainWindow.Juego != null)
@@ -227,8 +247,10 @@ namespace EditorVisualPokemonErrante
                     estados[i].EstadoOn = true;
                     estado -= (short)estados[i].Tag;
                 }
+            imgsZ.WhileEach((img) => { img.EstadoOn = false; return true; });
             //me quedan los turnos sleep
-            txtZTurns.Text = estado + "";
+            for (short i = 0; i < estado+1; i++)
+                imgsZ[i].EstadoOn = true;
         }
 
         private void previsualizacionXSE_Click(object sender, RoutedEventArgs e)
@@ -264,7 +286,9 @@ namespace EditorVisualPokemonErrante
 
         private byte SumaStatus()
         {
-            Int16 estadoFin = txtZTurns.Text!=""?Convert.ToInt16(txtZTurns.Text):(Int16)0;//pongo los turnos sleep
+            Int16 estadoFin =0;//pongo los turnos sleep
+            for (int i = 0; i < imgsZ.Length && imgsZ[i].EstadoOn; i++)
+                estadoFin=Convert.ToInt16((int)imgsZ[i].Tag);
             for (int i = 1; i < estados.Length; i++)
                 if (estados[i].EstadoOn)
                     estadoFin += (Int16)estados[i].Tag;

@@ -82,7 +82,16 @@
                                     <ColumnDefinition Width="63*"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid Grid.Column="0" x:Name="gridZTruns">
-                                    <TextBox x:Name="txtZTurns" PreviewTextInput="txtZTurns_PreviewTextInput"/>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="3*"/>
+                                        <ColumnDefinition Width="4*"/>
+                                        <ColumnDefinition Width="5*"/>
+                                        <ColumnDefinition Width="6*"/>
+                                        <ColumnDefinition Width="7*"/>
+                                        <ColumnDefinition Width="9*"/>
+                                    </Grid.ColumnDefinitions>
                                 </Grid>
                                 <Grid Grid.Column="1" x:Name="gridImgDor"/>
                             </Grid>
