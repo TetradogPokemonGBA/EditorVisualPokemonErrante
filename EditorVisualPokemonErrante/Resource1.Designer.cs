@@ -59,9 +59,10 @@ namespace EditorVisualPokemonErrante {
                 resourceCulture = value;
             }
         }
-        internal static System.Drawing.Bitmap GetResource(string name)
+        public static System.Drawing.Bitmap GetResource(string name)
         {
-            return (System.Drawing.Bitmap)ResourceManager.GetObject(name, resourceCulture);
+            object obj = ResourceManager.GetObject(name, resourceCulture);
+            return ((System.Drawing.Bitmap)(obj));    
         }
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
