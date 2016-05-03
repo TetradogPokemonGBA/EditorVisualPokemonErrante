@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace EditorVisualPokemonErrante.Properties {
+namespace EditorVisual.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

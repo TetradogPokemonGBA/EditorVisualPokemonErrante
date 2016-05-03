@@ -39,13 +39,12 @@
     <ApplicationIcon>iconoPokemonErrante.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FrameWorkPokemonGBA">
+      <HintPath>..\..\FrameWorkPokemonGBA\bin\Release\FrameWorkPokemonGBA.dll</HintPath>
+    </Reference>
     <Reference Include="Gabriel.Cat.Binaris, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Gabriel.Cat.Binaris\bin\Release\Gabriel.Cat.Binaris.dll</HintPath>
-    </Reference>
-    <Reference Include="Gabriel.Cat.GBA, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Gabriel.Cat.GBA\bin\Release\Gabriel.Cat.GBA.dll</HintPath>
     </Reference>
     <Reference Include="Gabriel.Cat.Utilitats">
       <HintPath>..\..\Gabriel.Cat.Utilitats\Gabriel.Cat.Utilitats\bin\Release\Gabriel.Cat.Utilitats.dll</HintPath>
@@ -1357,6 +1356,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="imagenes\Estados Blanco y Negro\DormidoZ-Off.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\photo_2016-04-28_20-38-56.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

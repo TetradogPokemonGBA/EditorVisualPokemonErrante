@@ -23,7 +23,7 @@ namespace EditorVisualPokemonErrante
     {//en un futuro toda la informacion se sacara de la rom!! asi es mas realista ya que son roms editadas y claro posiblemente tendran los pokemons cambiados!! por ejemplo el orden,imagen,nombre,nuevos,menos...etc..
         //en un futuro la parte de los mapas sera con los nombres y las miniaturas ;) asi es mas visual!!
          //Busca los pointers 58 6C 46 08 en FR, o 04 1A 5D 08 en esmeralda // A0 00 00 -> 00 00 A0 08
-        static Gabriel.Cat.GBA.RomPokemon juego;
+        static FrameWorkPokemonGBA.RomPokemon juego;
         internal static event EventHandler JuegoUpdated;
         Gabriel.Cat.Wpf.SwitchImg[] estados;
         Pokemon[] pokemons;
@@ -104,7 +104,7 @@ puedes ejecutar el siguiente script a la entrada del mapa:
                     Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.White);
                     imgIcoJuego.SetImage(new Bitmap(1, 1));
                 }
-                else if (MainWindow.Juego is Gabriel.Cat.GBA.RomEsmeralda)
+                else if (MainWindow.Juego.Version==FrameWorkPokemonGBA.RomPokemon.Juego.Esmeralda)
                 {
 
                     Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Black);
@@ -143,15 +143,15 @@ puedes ejecutar el siguiente script a la entrada del mapa:
 
         public static void PideJuego()
         {
-            Gabriel.Cat.GBA.RomPokemon romCargada=null;
+            FrameWorkPokemonGBA.RomPokemon romCargada =null;
             OpenFileDialog openFileDialog = new OpenFileDialog();
             bool? open = openFileDialog.ShowDialog();
             try
             {
                 if (open.HasValue && open.Value)
                 {
-                    romCargada = Gabriel.Cat.GBA.RomPokemon.GetRom(new FileInfo(openFileDialog.FileName));
-                    if (romCargada.Version != Gabriel.Cat.GBA.RomPokemon.ESMERALDA && romCargada.Version != Gabriel.Cat.GBA.RomPokemon.ROJOFUEGO||romCargada.Idioma!=Gabriel.Cat.GBA.RomPokemon.Idiomas.Español)
+                    romCargada = new FrameWorkPokemonGBA.RomPokemon(openFileDialog.FileName);
+                    if (romCargada.Version != FrameWorkPokemonGBA.RomPokemon.Juego.Esmeralda && romCargada.Version != FrameWorkPokemonGBA.RomPokemon.Juego.RojoFuegoYVerdeHoja||romCargada.Idioma!= FrameWorkPokemonGBA.RomPokemon.Idiomas.Español)
                     {
                         MessageBox.Show("La ROM no es compatible");
                         if (MainWindow.Juego != null)
@@ -175,7 +175,7 @@ puedes ejecutar el siguiente script a la entrada del mapa:
             catch { MessageBox.Show("El archivo esta ocupado por otro programa, cierrelo y vuelve a intentarlo"); }
         }
 
-        public static Gabriel.Cat.GBA.RomPokemon Juego
+        public static FrameWorkPokemonGBA.RomPokemon Juego
         {
             get { return juego; }
             set { juego = value; if (JuegoUpdated != null) JuegoUpdated(null, null); }
@@ -351,7 +351,7 @@ puedes ejecutar el siguiente script a la entrada del mapa:
             PideSiNoEstaElJuego();
             if (MainWindow.Juego != null)
             {
-                MainWindow.Juego.TablaRutasPokemonErrante = FilaRuta.ToByteMatriu(stkPanelFilasRutas.Children.Casting<FilaRuta>().ToTaula());
+                MainWindow.Juego.PokemonErrante.TablaRutas = FilaRuta.ToByteMatriu(stkPanelFilasRutas.Children.Casting<FilaRuta>().ToTaula());
                 PonRutaInfo();
             }
            
@@ -364,7 +364,7 @@ puedes ejecutar el siguiente script a la entrada del mapa:
                 {
                     PonRutaInfo();
                     stkPanelFilasRutas.Children.Clear();
-                    foreach (FilaRuta fila in FilaRuta.ToFilaRutaArray(MainWindow.Juego.TablaRutasPokemonErrante))
+                    foreach (FilaRuta fila in FilaRuta.ToFilaRutaArray(MainWindow.Juego.PokemonErrante.TablaRutas))
                     {
                         fila.Click += QuitarFilaClick;
                         stkPanelFilasRutas.Children.Add(fila);
@@ -385,8 +385,8 @@ puedes ejecutar el siguiente script a la entrada del mapa:
         {
             if(MainWindow.Juego!=null)
             {
-                txtOffsetTablaRutas.Text =(Hex) MainWindow.Juego.OffsetTablaPokemonErrante;
-                txtNumeroDeFilas.Text = MainWindow.Juego.NFilasRutasPokemonErrante+"";
+                txtOffsetTablaRutas.Text =(Hex) MainWindow.Juego.PokemonErrante.OffsetTabla;
+                txtNumeroDeFilas.Text = MainWindow.Juego.PokemonErrante.NFilasRutas+"";
             }
         }
 

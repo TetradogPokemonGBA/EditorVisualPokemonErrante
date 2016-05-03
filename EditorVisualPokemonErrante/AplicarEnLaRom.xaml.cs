@@ -138,7 +138,7 @@ namespace EditorVisualPokemonErrante
         {
             if (MainWindow.Juego!=null)
             {
-                if (MainWindow.Juego is Gabriel.Cat.GBA.RomEsmeralda)
+                if (MainWindow.Juego.Version==FrameWorkPokemonGBA.RomPokemon.Juego.Esmeralda)
                 {
                     imgVersionGame.SetImage(Resource1.Emerald);
                     grid.Background = new SolidColorBrush(Colors.Black);
@@ -163,8 +163,8 @@ namespace EditorVisualPokemonErrante
             int direccion;
             if (MainWindow.Juego != null)
             {
-                txtByteScript.Text = MainWindow.Juego.BytesScriptPokemonErranteString(pokemon, vida, nivel, stat);
-                bytesScript= MainWindow.Juego.BytesScriptPokemonErrante(pokemon, vida, nivel, stat);
+                txtByteScript.Text = MainWindow.Juego.PokemonErrante.BytesScriptString(pokemon, vida, nivel, stat);
+                bytesScript= MainWindow.Juego.PokemonErrante.BytesScript(pokemon, vida, nivel, stat);
                 direccion = MainWindow.Juego.ArchivoGbaPokemon.IndexOf(bytesScript);
                 if (direccion > 0)
                     txtOffset.Text = (Hex)direccion;
