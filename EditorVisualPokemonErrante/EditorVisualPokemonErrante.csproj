@@ -39,7 +39,8 @@
     <ApplicationIcon>iconoPokemonErrante.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FrameWorkPokemonGBA">
+    <Reference Include="FrameWorkPokemonGBA, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\FrameWorkPokemonGBA\bin\Release\FrameWorkPokemonGBA.dll</HintPath>
     </Reference>
     <Reference Include="Gabriel.Cat.Binaris, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">

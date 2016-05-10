@@ -151,7 +151,7 @@ puedes ejecutar el siguiente script a la entrada del mapa:
                 if (open.HasValue && open.Value)
                 {
                     romCargada = new FrameWorkPokemonGBA.RomPokemon(openFileDialog.FileName);
-                    if (romCargada.Version != FrameWorkPokemonGBA.RomPokemon.Juego.Esmeralda && romCargada.Version != FrameWorkPokemonGBA.RomPokemon.Juego.RojoFuegoYVerdeHoja||romCargada.Idioma!= FrameWorkPokemonGBA.RomPokemon.Idiomas.Español)
+                    if (!romCargada.EsCompatiblePokemonErrante)
                     {
                         MessageBox.Show("La ROM no es compatible");
                         if (MainWindow.Juego != null)
