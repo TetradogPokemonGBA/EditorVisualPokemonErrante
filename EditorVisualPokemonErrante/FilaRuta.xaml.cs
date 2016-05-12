@@ -50,7 +50,7 @@ namespace EditorVisualPokemonErrante
          
                 if (MainWindow.Juego != null)
                 {
-                    IsEsmeraldaRow = MainWindow.Juego.Version==FrameWorkPokemonGBA.RomPokemon.Juego.Esmeralda;
+                    IsEsmeraldaRow = MainWindow.Juego.Version==FrameWorkPokemonGBA.RomPokemon.VersionRom.Esmeralda;
                 }
                 for (int i = 0; i < campos.Length; i++)
                     campos[i].IsReadOnly = MainWindow.Juego == null;

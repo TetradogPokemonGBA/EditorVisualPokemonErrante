@@ -138,7 +138,7 @@ namespace EditorVisualPokemonErrante
         {
             if (MainWindow.Juego!=null)
             {
-                if (MainWindow.Juego.Version==FrameWorkPokemonGBA.RomPokemon.Juego.Esmeralda)
+                if (MainWindow.Juego.Version==FrameWorkPokemonGBA.RomPokemon.VersionRom.Esmeralda)
                 {
                     imgVersionGame.SetImage(Resource1.Emerald);
                     grid.Background = new SolidColorBrush(Colors.Black);

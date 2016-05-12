@@ -21,8 +21,8 @@ namespace EditorVisualPokemonErrante
     /// </summary>
     public partial class PrevisualizarScriptXSE : Window
     {
-        static FrameWorkPokemonGBA.RomPokemon romEsmeralda = new FrameWorkPokemonGBA.RomPokemon(FrameWorkPokemonGBA.RomPokemon.Idiomas.Español);
-        static FrameWorkPokemonGBA.RomPokemon romRojoFuego = new FrameWorkPokemonGBA.RomPokemon(FrameWorkPokemonGBA.RomPokemon.Idiomas.Español);
+        static FrameWorkPokemonGBA.RomPokemon romEsmeralda = new FrameWorkPokemonGBA.RomPokemon(FrameWorkPokemonGBA.RomPokemon.IdiomaRom.Español);
+        static FrameWorkPokemonGBA.RomPokemon romRojoFuego = new FrameWorkPokemonGBA.RomPokemon(FrameWorkPokemonGBA.RomPokemon.IdiomaRom.Español);
 
         public PrevisualizarScriptXSE(int pokemon,int vida,byte nivel,byte stat)
         {

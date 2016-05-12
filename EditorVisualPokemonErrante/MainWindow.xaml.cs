@@ -8,6 +8,7 @@ using System.Drawing;
 using System.IO;
 using Microsoft.Win32;
 using Gabriel.Cat;
+using System.Threading;
 
 namespace EditorVisualPokemonErrante
 {
@@ -58,6 +59,7 @@ puedes ejecutar el siguiente script a la entrada del mapa:
             string[] pokemosString = Resource1.pokedexHoenn.Split('\n');
             string[] camposPkm;
             Bitmap gifPkm;
+            Action act;
             Type tipoRecuros = typeof(Resource1);
             Estados[] enumEstados = (Estados[])Enum.GetValues(typeof(Estados));
             estados = new Gabriel.Cat.Wpf.SwitchImg[enumEstados.Length];
@@ -104,7 +106,7 @@ puedes ejecutar el siguiente script a la entrada del mapa:
                     Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.White);
                     imgIcoJuego.SetImage(new Bitmap(1, 1));
                 }
-                else if (MainWindow.Juego.Version==FrameWorkPokemonGBA.RomPokemon.Juego.Esmeralda)
+                else if (MainWindow.Juego.Version==FrameWorkPokemonGBA.RomPokemon.VersionRom.Esmeralda)
                 {
 
                     Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Black);
@@ -112,8 +114,17 @@ puedes ejecutar el siguiente script a la entrada del mapa:
                 }
                 else
                 {
+
                     Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Red);
                     imgIcoJuego.SetImage(Resource1.FireRed);
+                    //pongo los pokemons!!
+                    act = () =>
+                    {
+                        FrameWorkPokemonGBA.Pokedex pokedex = MainWindow.Juego.Pokedex;
+                        cmbPokemons.ItemsSource = pokedex;
+                        cmbPokemons.SelectedIndex = 0;
+                    };
+                    Dispatcher.BeginInvoke(act);
                 }
                 PonRuta();
             };
@@ -311,12 +322,17 @@ puedes ejecutar el siguiente script a la entrada del mapa:
         private void cmbPokemons_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Pokemon pkm = ((ComboBox)sender).SelectedItem as Pokemon;
-
+            FrameWorkPokemonGBA.Pokemon pkmOri= ((ComboBox)sender).SelectedItem as FrameWorkPokemonGBA.Pokemon;
             if (pkm != null)
             {
                 imgPokemon.Image = pkm.Img;
                 txtNombre.Text = pkm.Nombre;
                 txtNumPokedex.Text = "#" + pkm.NumeroNacional;
+            }else if(pkmOri!=null)
+            {
+                imgPokemon.Image = pkmOri.ImgFrontal.ToBitmap();
+                txtNombre.Text = pkmOri.Nombre;
+                txtNumPokedex.Text = "#" + pkmOri.NumeroPokedexNacional;
             }
         }
 
@@ -326,7 +342,13 @@ puedes ejecutar el siguiente script a la entrada del mapa:
             if (Juego != null)
             {
                 ValidarNiveYVida();
+                if(!Juego.EsCompatiblePokedex)
                 new AplicarEnLaRom(((Pokemon)cmbPokemons.SelectedItem).NumeroNacional, Convert.ToInt32(txtVidaQueTiene.Text), Convert.ToByte(txtNivel.Text), SumaStatus()).Show();
+                else
+                {
+                    new AplicarEnLaRom(Convert.ToInt32(((FrameWorkPokemonGBA.Pokemon)cmbPokemons.SelectedItem).NumeroPokedexNacional), Convert.ToInt32(txtVidaQueTiene.Text), Convert.ToByte(txtNivel.Text), SumaStatus()).Show();
+
+                }
             }
         }
 
