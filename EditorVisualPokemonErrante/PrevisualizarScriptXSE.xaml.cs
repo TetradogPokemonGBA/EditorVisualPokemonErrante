@@ -21,17 +21,15 @@ namespace EditorVisualPokemonErrante
     /// </summary>
     public partial class PrevisualizarScriptXSE : Window
     {
-        static FrameWorkPokemonGBA.RomPokemon romEsmeralda = new FrameWorkPokemonGBA.RomPokemon(FrameWorkPokemonGBA.RomPokemon.IdiomaRom.Español);
-        static FrameWorkPokemonGBA.RomPokemon romRojoFuego = new FrameWorkPokemonGBA.RomPokemon(FrameWorkPokemonGBA.RomPokemon.IdiomaRom.Español);
 
-        public PrevisualizarScriptXSE(int pokemon,int vida,byte nivel,byte stat)
+        public PrevisualizarScriptXSE(uint pokemon,uint vida,byte nivel,byte stat)
         {
             InitializeComponent();
             Title = "Scirpt Rom version Española";
             imgVersionR.SetImage(Resource1.FireRed);
-            txtScriptR.Text = romRojoFuego.PokemonErrante.Script(pokemon,vida,nivel,stat);
+            txtScriptR.Text = FrameWorkPokemonGBA.PokemonErrante.Script(FrameWorkPokemonGBA.RomPokemon.IdiomaRom.Español,FrameWorkPokemonGBA.RomPokemon.VersionRom.RojoFuego,pokemon,vida,nivel,stat);
             imgVersionE.SetImage(Resource1.Emerald);
-            txtScriptE.Text = romEsmeralda.PokemonErrante.Script(pokemon, vida, nivel, stat);
+            txtScriptE.Text = FrameWorkPokemonGBA.PokemonErrante.Script(FrameWorkPokemonGBA.RomPokemon.IdiomaRom.Español, FrameWorkPokemonGBA.RomPokemon.VersionRom.Esmeralda, pokemon, vida, nivel, stat);
         }
 
     }

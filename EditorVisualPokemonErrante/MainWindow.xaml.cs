@@ -22,16 +22,15 @@ namespace EditorVisualPokemonErrante
     /// </summary>
     public partial class MainWindow : Window
     {//en un futuro toda la informacion se sacara de la rom!! asi es mas realista ya que son roms editadas y claro posiblemente tendran los pokemons cambiados!! por ejemplo el orden,imagen,nombre,nuevos,menos...etc..
-        //en un futuro la parte de los mapas sera con los nombres y las miniaturas ;) asi es mas visual!!
-         //Busca los pointers 58 6C 46 08 en FR, o 04 1A 5D 08 en esmeralda // A0 00 00 -> 00 00 A0 08
+     //en un futuro la parte de los mapas sera con los nombres y las miniaturas ;) asi es mas visual!!
+     //Busca los pointers 58 6C 46 08 en FR, o 04 1A 5D 08 en esmeralda // A0 00 00 -> 00 00 A0 08
         static FrameWorkPokemonGBA.RomPokemon juego;
         internal static event EventHandler JuegoUpdated;
         Gabriel.Cat.Wpf.SwitchImg[] estados;
-        Pokemon[] pokemons;
         private readonly int MAXNIVEL = 100;
         private readonly int MAXVIDA = 65535;//por mirar de momento es el maximo con 2bytes
         Gabriel.Cat.Wpf.SwitchImg[] imgsZ;
-        private const int MAXDORMTURNS= 8;
+        private const int MAXDORMTURNS = 8;
 
         /*
 El último paso es decirle a la rutina la nueva longitud de la tabla. ¿Habéis visto que la tabla de FR mide 25 filas? 25 en hex es 19.
@@ -56,11 +55,6 @@ puedes ejecutar el siguiente script a la entrada del mapa:
         public MainWindow()
         {
             MenuItem cargar = new MenuItem() { Header = "Cargar Juego" }, backup = new MenuItem() { Header = "Hacer BackUp" };
-            string[] pokemosString = Resource1.pokedexHoenn.Split('\n');
-            string[] camposPkm;
-            Bitmap gifPkm;
-            Action act;
-            Type tipoRecuros = typeof(Resource1);
             Estados[] enumEstados = (Estados[])Enum.GetValues(typeof(Estados));
             estados = new Gabriel.Cat.Wpf.SwitchImg[enumEstados.Length];
             InitializeComponent();
@@ -73,21 +67,8 @@ puedes ejecutar el siguiente script a la entrada del mapa:
             estados[4] = new Gabriel.Cat.Wpf.SwitchImg(Resource1.Paralizado, Resource1.Paralizado_Off) { Tag = (short)Estados.Paralizado };
             estados[5] = new Gabriel.Cat.Wpf.SwitchImg(Resource1.Envenenamiento_grave, Resource1.Envenenamiento_grave_Off) { Tag = (short)Estados.Envenenamiento_grave };
             //cargo los pokemons
-            pokemons = new Pokemon[pokemosString.Length - 1];
-            for (int i = 0; i < pokemons.Length; i++)
-            {
-
-                camposPkm = pokemosString[i].Split(';');
-                camposPkm[1] = camposPkm[1].Remove(camposPkm[1].Length - 1, 1);
-                camposPkm[1] = camposPkm[1].ToLower();
-                pokemons[i] = new Pokemon(camposPkm[1], null, Convert.ToInt32(camposPkm[0]));
-                gifPkm = Resource1.GetResource(pokemons[i].NombreInternoGif);
-                pokemons[i].Img = gifPkm;
-
-
-            }
             imgsZ = new Gabriel.Cat.Wpf.SwitchImg[MAXDORMTURNS];
-            for(int i=0;i<imgsZ.Length;i++)
+            for (int i = 0; i < imgsZ.Length; i++)
             {
                 imgsZ[i] = new Gabriel.Cat.Wpf.SwitchImg(Resource1.DormidoZ, Resource1.DormidoZ_Off);
                 imgsZ[i].SwitchChanged += PonSleepTurn;
@@ -95,8 +76,6 @@ puedes ejecutar el siguiente script a la entrada del mapa:
                 gridZTruns.Children.Add(imgsZ[i]);
                 Grid.SetColumn(imgsZ[i], i);
             }
-            cmbPokemons.ItemsSource = pokemons.Ordena();
-            cmbPokemons.SelectedIndex = 0;
             uniGridEstados.Children.AddRange(estados.SubArray(1));
             gridImgDor.Children.Add(estados[0]);
             JuegoUpdated += (s, e) =>
@@ -106,7 +85,7 @@ puedes ejecutar el siguiente script a la entrada del mapa:
                     Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.White);
                     imgIcoJuego.SetImage(new Bitmap(1, 1));
                 }
-                else if (MainWindow.Juego.Version==FrameWorkPokemonGBA.RomPokemon.VersionRom.Esmeralda)
+                else if (MainWindow.Juego.Version == FrameWorkPokemonGBA.RomPokemon.VersionRom.Esmeralda)
                 {
 
                     Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Black);
@@ -117,14 +96,13 @@ puedes ejecutar el siguiente script a la entrada del mapa:
 
                     Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Red);
                     imgIcoJuego.SetImage(Resource1.FireRed);
-                    //pongo los pokemons!!
-                    act = () =>
-                    {
-                        FrameWorkPokemonGBA.Pokedex pokedex = MainWindow.Juego.Pokedex;
-                        cmbPokemons.ItemsSource = pokedex;
-                        cmbPokemons.SelectedIndex = 0;
-                    };
-                    Dispatcher.BeginInvoke(act);
+                    //pongo los pokemons!
+                }
+                if(MainWindow.Juego!=null)
+                {
+                    MainWindow.Juego.Pokedex.CargaTodosLosPokemons();
+                    cmbPokemons.ItemsSource = MainWindow.Juego.Pokedex;
+                    cmbPokemons.SelectedIndex = 1;
                 }
                 PonRuta();
             };
@@ -135,6 +113,11 @@ puedes ejecutar el siguiente script a la entrada del mapa:
             cargar.Click += (s, e) => PideJuego();
             backup.Click += (s, e) => { if (MainWindow.Juego != null) MainWindow.Juego.BackUp(); };
             PideJuego();
+            if(MainWindow.Juego==null)
+            {
+                MessageBox.Show("Se necesita una rom para sacar la informacion");
+                this.Close();
+            }
         }
 
         private void PonSleepTurn(object sender, bool e)
@@ -154,7 +137,7 @@ puedes ejecutar el siguiente script a la entrada del mapa:
 
         public static void PideJuego()
         {
-            FrameWorkPokemonGBA.RomPokemon romCargada =null;
+            FrameWorkPokemonGBA.RomPokemon romCargada = null;
             OpenFileDialog openFileDialog = new OpenFileDialog();
             bool? open = openFileDialog.ShowDialog();
             try
@@ -260,7 +243,7 @@ puedes ejecutar el siguiente script a la entrada del mapa:
                 }
             imgsZ.WhileEach((img) => { img.EstadoOn = false; return true; });
             //me quedan los turnos sleep
-            for (short i = 0; i < estado+1; i++)
+            for (short i = 0; i < estado + 1; i++)
                 imgsZ[i].EstadoOn = true;
         }
 
@@ -275,7 +258,7 @@ puedes ejecutar el siguiente script a la entrada del mapa:
             ValidarNiveYVida();
             nivel = Convert.ToInt32(txtNivel.Text);
             vida = Convert.ToInt32(txtVidaQueTiene.Text);
-            return new PrevisualizarScriptXSE((cmbPokemons.SelectedItem as Pokemon).NumeroNacional, vida, Convert.ToByte(nivel), SumaStatus());
+            return new PrevisualizarScriptXSE((cmbPokemons.SelectedItem as FrameWorkPokemonGBA.Pokemon).NumeroPokedexNacional, Convert.ToUInt32(vida), Convert.ToByte(nivel), SumaStatus());
         }
 
         private void ValidarNiveYVida()
@@ -297,9 +280,9 @@ puedes ejecutar el siguiente script a la entrada del mapa:
 
         private byte SumaStatus()
         {
-            Int16 estadoFin =0;//pongo los turnos sleep
+            Int16 estadoFin = 0;//pongo los turnos sleep
             for (int i = 0; i < imgsZ.Length && imgsZ[i].EstadoOn; i++)
-                estadoFin=Convert.ToInt16((int)imgsZ[i].Tag);
+                estadoFin = Convert.ToInt16((int)imgsZ[i].Tag);
             for (int i = 1; i < estados.Length; i++)
                 if (estados[i].EstadoOn)
                     estadoFin += (Int16)estados[i].Tag;
@@ -322,13 +305,14 @@ puedes ejecutar el siguiente script a la entrada del mapa:
         private void cmbPokemons_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Pokemon pkm = ((ComboBox)sender).SelectedItem as Pokemon;
-            FrameWorkPokemonGBA.Pokemon pkmOri= ((ComboBox)sender).SelectedItem as FrameWorkPokemonGBA.Pokemon;
+            FrameWorkPokemonGBA.Pokemon pkmOri = ((ComboBox)sender).SelectedItem as FrameWorkPokemonGBA.Pokemon;
             if (pkm != null)
             {
                 imgPokemon.Image = pkm.Img;
                 txtNombre.Text = pkm.Nombre;
                 txtNumPokedex.Text = "#" + pkm.NumeroNacional;
-            }else if(pkmOri!=null)
+            }
+            else if (pkmOri != null)
             {
                 imgPokemon.Image = pkmOri.ImgFrontal.ToBitmap();
                 txtNombre.Text = pkmOri.Nombre;
@@ -342,13 +326,9 @@ puedes ejecutar el siguiente script a la entrada del mapa:
             if (Juego != null)
             {
                 ValidarNiveYVida();
-                if(!Juego.EsCompatiblePokedex)
-                new AplicarEnLaRom(((Pokemon)cmbPokemons.SelectedItem).NumeroNacional, Convert.ToInt32(txtVidaQueTiene.Text), Convert.ToByte(txtNivel.Text), SumaStatus()).Show();
-                else
-                {
-                    new AplicarEnLaRom(Convert.ToInt32(((FrameWorkPokemonGBA.Pokemon)cmbPokemons.SelectedItem).NumeroPokedexNacional), Convert.ToInt32(txtVidaQueTiene.Text), Convert.ToByte(txtNivel.Text), SumaStatus()).Show();
+                new AplicarEnLaRom(((FrameWorkPokemonGBA.Pokemon)cmbPokemons.SelectedItem).NumeroPokedexNacional, Convert.ToUInt32(txtVidaQueTiene.Text), Convert.ToByte(txtNivel.Text), SumaStatus()).Show();
 
-                }
+                
             }
         }
 
@@ -376,7 +356,7 @@ puedes ejecutar el siguiente script a la entrada del mapa:
                 MainWindow.Juego.PokemonErrante.TablaRutas = FilaRuta.ToByteMatriu(stkPanelFilasRutas.Children.Casting<FilaRuta>().ToTaula());
                 PonRutaInfo();
             }
-           
+
         }
         private void PonRuta()
         {
@@ -399,16 +379,16 @@ puedes ejecutar el siguiente script a la entrada del mapa:
 
         private void QuitarFilaClick(object sender, EventArgs e)
         {
-          if (ckQuitarHaciendoClick.IsChecked.Value)
-                stkPanelFilasRutas.Children.Remove((FilaRuta)sender); 
+            if (ckQuitarHaciendoClick.IsChecked.Value)
+                stkPanelFilasRutas.Children.Remove((FilaRuta)sender);
         }
 
         private void PonRutaInfo()
         {
-            if(MainWindow.Juego!=null)
+            if (MainWindow.Juego != null)
             {
-                txtOffsetTablaRutas.Text =(Hex) MainWindow.Juego.PokemonErrante.OffsetTabla;
-                txtNumeroDeFilas.Text = MainWindow.Juego.PokemonErrante.NFilasRutas+"";
+                txtOffsetTablaRutas.Text = (Hex)MainWindow.Juego.PokemonErrante.OffsetTabla;
+                txtNumeroDeFilas.Text = MainWindow.Juego.PokemonErrante.NFilasRutas + "";
             }
         }
 
@@ -429,8 +409,8 @@ puedes ejecutar el siguiente script a la entrada del mapa:
             if (!e.Handled)
             {
                 numTurnos = Convert.ToInt32(e.Text);
-                e.Handled = numTurnos > 7||numTurnos<0;
-                estados[0].EstadoOn = numTurnos>0;
+                e.Handled = numTurnos > 7 || numTurnos < 0;
+                estados[0].EstadoOn = numTurnos > 0;
             }
             if (e.Text == "")
                 estados[0].EstadoOn = false;

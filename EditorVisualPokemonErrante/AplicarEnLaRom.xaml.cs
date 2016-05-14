@@ -26,7 +26,7 @@ namespace EditorVisualPokemonErrante
     /// </summary>
     public partial class AplicarEnLaRom : Window
     {
-        int pokemon, vida;
+        uint pokemon, vida;
         byte nivel, stat;
         const int LENGTHSCRIPT = 19;
         const long BYTESMEMORIA = 16;
@@ -34,7 +34,7 @@ namespace EditorVisualPokemonErrante
         private const int BYTEEMPTY = 0xFF;
         byte[] bytesScript;
 
-        public AplicarEnLaRom(int pokemon, int vida, byte nivel, byte stat)
+        public AplicarEnLaRom(uint pokemon, uint vida, byte nivel, byte stat)
         {
             
             MenuItem cargar = new MenuItem() { Header = "Cargar" }, backup = new MenuItem() { Header = "Hacer BackUp" },quitarScript=new MenuItem() { Header="Quitar script"};
@@ -163,8 +163,10 @@ namespace EditorVisualPokemonErrante
             int direccion;
             if (MainWindow.Juego != null)
             {
-                txtByteScript.Text = MainWindow.Juego.PokemonErrante.BytesScriptString(pokemon, vida, nivel, stat);
-                bytesScript= MainWindow.Juego.PokemonErrante.BytesScript(pokemon, vida, nivel, stat);
+                /* txtByteScript.Text = MainWindow.Juego.PokemonErrante.BytesScriptString(pokemon, vida, nivel, stat);
+                 bytesScript= MainWindow.Juego.PokemonErrante.BytesScript(pokemon, vida, nivel, stat);*/
+                txtByteScript.Text = FrameWorkPokemonGBA.PokemonErrante.ByteScriptString(FrameWorkPokemonGBA.RomPokemon.IdiomaRom.Español, MainWindow.Juego.Version, pokemon, vida, nivel, stat);
+                bytesScript = FrameWorkPokemonGBA.PokemonErrante.BytesScript(FrameWorkPokemonGBA.RomPokemon.IdiomaRom.Español, MainWindow.Juego.Version, pokemon, vida, nivel, stat);
                 direccion = MainWindow.Juego.ArchivoGbaPokemon.IndexOf(bytesScript);
                 if (direccion > 0)
                     txtOffset.Text = (Hex)direccion;
