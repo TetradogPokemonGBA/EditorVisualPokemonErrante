@@ -10,13 +10,17 @@
         mc:Ignorable="d" 
         Title="Editor Visual Pokemon Errante  by pikachu240, investigado by Razhier" Height="350" Width="525" ResizeMode="CanMinimize" WindowStartupLocation="Manual" >
     <Grid  x:Name="grid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="40*"/>
+            <ColumnDefinition Width="133*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="7*"/>
             <RowDefinition Height="102*"/>
         </Grid.RowDefinitions>
         <Image Grid.Row="0" x:Name="imgIcoJuego" HorizontalAlignment="Left" Width="21" />
         <!--  <Button Grid.Row="0" x:Name="btnCerrar" Background="Transparent" HorizontalAlignment="Right" Width="13" RenderTransformOrigin="0.455,-0.699" Margin="0,3,2,5"/>-->
-        <TabControl Grid.Row="1" x:Name="tab" Background="White">
+        <TabControl Grid.Row="1" x:Name="tab" Background="White" Grid.ColumnSpan="2">
 
             <TabItem Header="Pokemon Errante" >
                 <!--Zona para crear el scrip y poderlo poner en una rom escogida i/o poderlo guardar en formato XSE estaria poder tambien importar aunque parece mas dificil aunque si se exporta como bytes y se importa luego es igual :D es mio-->
