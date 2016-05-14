@@ -122,31 +122,28 @@ puedes ejecutar el siguiente script a la entrada del mapa:
             }
             this.KeyDown += (sender, e) =>
             {
-                if (e.Key == Key.S)
-                {
-                    verShiny = !verShiny;
-                    selectedIndex = cmbPokemons.SelectedIndex;
-                    cmbPokemons.SelectedIndex = 0;
-                    cmbPokemons.SelectedIndex = selectedIndex;
-                }
-                else if (e.Key == Key.T)
-                {
-
-                    verTrasero = !verTrasero;
-                    selectedIndex = cmbPokemons.SelectedIndex;
-                    cmbPokemons.SelectedIndex = 0;
-                    cmbPokemons.SelectedIndex = selectedIndex;
-                }
-                else if (e.Key==Key.Up)
-                {
-                    if (cmbPokemons.SelectedIndex > 0)
-                        cmbPokemons.SelectedIndex--;
-                }
-                else if (e.Key == Key.Down)
-                {
-                    if (cmbPokemons.SelectedIndex < cmbPokemons.Items.Count)
-                        cmbPokemons.SelectedIndex++;
-                }
+				switch (e.Key) {
+					case Key.S:
+						verShiny = !verShiny;
+						selectedIndex = cmbPokemons.SelectedIndex;
+						cmbPokemons.SelectedIndex = 0;
+						cmbPokemons.SelectedIndex = selectedIndex;
+						break;
+					case Key.T:
+						verTrasero = !verTrasero;
+						selectedIndex = cmbPokemons.SelectedIndex;
+						cmbPokemons.SelectedIndex = 0;
+						cmbPokemons.SelectedIndex = selectedIndex;
+						break;
+					case Key.Up:
+						if (cmbPokemons.SelectedIndex > 0)
+							cmbPokemons.SelectedIndex--;
+						break;
+					case Key.Down:
+						if (cmbPokemons.SelectedIndex < cmbPokemons.Items.Count)
+							cmbPokemons.SelectedIndex++;
+						break;
+				}
             };
         }
 
