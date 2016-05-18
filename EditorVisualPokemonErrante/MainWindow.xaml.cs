@@ -54,7 +54,8 @@ Si por algún motivo quieres que aparezca en un mapa fuera de ese banco (una cue
 puedes ejecutar el siguiente script a la entrada del mapa:
 */
         public MainWindow()
-        {
+        { 
+
             MenuItem cargar = new MenuItem() { Header = "Cargar Juego" }, backup = new MenuItem() { Header = "Hacer BackUp" };
             Estados[] enumEstados = (Estados[])Enum.GetValues(typeof(Estados));
             int selectedIndex;
@@ -123,12 +124,12 @@ puedes ejecutar el siguiente script a la entrada del mapa:
             this.KeyDown += (sender, e) =>
             {
 				switch (e.Key) {
-					case Key.S:
+					/*case Key.S:
 						verShiny = !verShiny;
 						selectedIndex = cmbPokemons.SelectedIndex;
 						cmbPokemons.SelectedIndex = 0;
 						cmbPokemons.SelectedIndex = selectedIndex;
-						break;
+						break;*/
 					case Key.T:
 						verTrasero = !verTrasero;
 						selectedIndex = cmbPokemons.SelectedIndex;
@@ -351,6 +352,7 @@ puedes ejecutar el siguiente script a la entrada del mapa:
                 }
                 txtNombre.Text = pkmOri.Nombre;
                 txtNumPokedex.Text = "#" + pkmOri.NumeroPokedexNacional;
+              //  MessageBox.Show(pkmOri.Descripcion);
             }
 
         }
