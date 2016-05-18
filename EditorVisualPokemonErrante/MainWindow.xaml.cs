@@ -103,7 +103,6 @@ puedes ejecutar el siguiente script a la entrada del mapa:
                 }
                 if (MainWindow.Juego != null)
                 {
-                    MainWindow.Juego.Pokedex.CargaTodosLosPokemons();
                     cmbPokemons.ItemsSource = MainWindow.Juego.Pokedex;
                     cmbPokemons.SelectedIndex = 1;
                 }
