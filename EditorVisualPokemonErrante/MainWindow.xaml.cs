@@ -123,12 +123,12 @@ puedes ejecutar el siguiente script a la entrada del mapa:
             this.KeyDown += (sender, e) =>
             {
 				switch (e.Key) {
-					/*case Key.S:
+					case Key.S:
 						verShiny = !verShiny;
 						selectedIndex = cmbPokemons.SelectedIndex;
 						cmbPokemons.SelectedIndex = 0;
 						cmbPokemons.SelectedIndex = selectedIndex;
-						break;*/
+						break;
 					case Key.T:
 						verTrasero = !verTrasero;
 						selectedIndex = cmbPokemons.SelectedIndex;
