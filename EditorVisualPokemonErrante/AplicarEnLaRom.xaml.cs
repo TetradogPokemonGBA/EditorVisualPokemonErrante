@@ -26,7 +26,7 @@ namespace EditorVisualPokemonErrante
     /// </summary>
     public partial class AplicarEnLaRom : Window
     {
-        uint pokemon, vida;
+        int pokemon, vida;
         byte nivel, stat;
         const int LENGTHSCRIPT = 19;
         const long BYTESMEMORIA = 16;
@@ -34,7 +34,7 @@ namespace EditorVisualPokemonErrante
         private const int BYTEEMPTY = 0xFF;
         byte[] bytesScript;
 
-        public AplicarEnLaRom(uint pokemon, uint vida, byte nivel, byte stat)
+        public AplicarEnLaRom(int pokemon, int vida, byte nivel, byte stat)
         {
             
             MenuItem cargar = new MenuItem() { Header = "Cargar" }, backup = new MenuItem() { Header = "Hacer BackUp" },quitarScript=new MenuItem() { Header="Quitar script"};
@@ -120,7 +120,7 @@ namespace EditorVisualPokemonErrante
             EliminarEspacios();
             if (txtOffset.Text != "" && Hex.ValidaString(txtOffset.Text))
             {
-                valida = MainWindow.Juego.ValidaDireccion((uint)(Hex)txtByteScript.Text,Convert.ToUInt32(bytesScript.Length));
+                valida = MainWindow.Juego.ValidaDireccion((uint)(Hex)txtByteScript.Text,bytesScript.Length);
             }
             else valida = false;
             return valida;

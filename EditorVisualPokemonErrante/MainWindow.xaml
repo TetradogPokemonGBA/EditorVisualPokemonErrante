@@ -58,7 +58,7 @@
                                 <TextBlock Grid.Column="0" x:Name="txtNombre"/>
                                 <TextBlock Grid.Column="1" x:Name="txtNumPokedex"/>
                                 <TextBlock Grid.Column="2" Text="Nivel:"/>
-                                <TextBox Grid.Column="3" PreviewTextInput="txtVidaQueTiene_PreviewTextInput" x:Name="txtNivel" Text="100" Height="19" VerticalAlignment="Top" />
+                                <TextBox Grid.Column="3" KeyUp="txtNivel_PreviewTextInput" x:Name="txtNivel" Text="100" Height="19" VerticalAlignment="Top" />
                             </Grid>
                         </Grid>
                         <Grid Grid.Column="1" >
@@ -75,8 +75,9 @@
                                 <TextBlock Text="STATS"  FontSize="20" HorizontalAlignment="Center"/>
                                 <StackPanel Grid.Row="1" Orientation="Horizontal">
                                     <TextBlock  Text="Vida " />
-                                    <TextBox x:Name="txtVidaQueTiene" PreviewTextInput="txtVidaQueTiene_PreviewTextInput" Width="110" Text="100"/>
-                                    <TextBlock x:Name="txblVidaTotalEspecie" Text="/Total?"/>
+                                    <TextBox x:Name="txtVidaQueTiene" KeyUp="txtVidaQueTiene_PreviewTextInput" Width="110" Text="100"/>
+                                    <TextBlock  Text="/"/>
+                                    <TextBlock x:Name="txblVidaTotalEspecie" Text="Total?"/>
                                 </StackPanel>
 
                             </Grid>

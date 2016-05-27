@@ -22,7 +22,7 @@ namespace EditorVisualPokemonErrante
     public partial class PrevisualizarScriptXSE : Window
     {
 
-        public PrevisualizarScriptXSE(uint pokemon,uint vida,byte nivel,byte stat)
+        public PrevisualizarScriptXSE(int pokemon,int vida,byte nivel,byte stat)
         {
             InitializeComponent();
             Title = "Scirpt Rom version Española";

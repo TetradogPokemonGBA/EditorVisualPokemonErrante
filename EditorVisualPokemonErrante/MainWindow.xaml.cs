@@ -103,7 +103,7 @@ puedes ejecutar el siguiente script a la entrada del mapa:
                 }
                 if (MainWindow.Juego != null)
                 {
-                    cmbPokemons.ItemsSource = MainWindow.Juego.Pokedex;
+                    cmbPokemons.ItemsSource = MainWindow.Juego.Pokedex.Filtra((pokemonAMirar)=> { return pokemonAMirar.EsUnPokemon; });
                     cmbPokemons.SelectedIndex = 1;
                 }
                 PonRuta();
@@ -285,7 +285,7 @@ puedes ejecutar el siguiente script a la entrada del mapa:
             ValidarNiveYVida();
             nivel = Convert.ToInt32(txtNivel.Text);
             vida = Convert.ToInt32(txtVidaQueTiene.Text);
-            return new PrevisualizarScriptXSE((cmbPokemons.SelectedItem as FrameWorkPokemonGBA.Pokemon).NumeroPokedexNacional, Convert.ToUInt32(vida), Convert.ToByte(nivel), SumaStatus());
+            return new PrevisualizarScriptXSE((cmbPokemons.SelectedItem as FrameWorkPokemonGBA.Pokemon).NumeroPokedexNacional, vida, Convert.ToByte(nivel), SumaStatus());
         }
 
         private void ValidarNiveYVida()
@@ -316,14 +316,15 @@ puedes ejecutar el siguiente script a la entrada del mapa:
             return Convert.ToByte(estadoFin);
         }
 
-        private void txtVidaQueTiene_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        private void txtVidaQueTiene_PreviewTextInput(object sender, KeyboardEventArgs e)
         {
             bool incorrecto = true;
             int number;
             try
             {
-                number = Convert.ToInt32(e.Text);
-                incorrecto = false;
+                number = Convert.ToInt32(((TextBox)sender).Text);
+                if(number<Convert.ToInt32(txblVidaTotalEspecie.Text))
+                  incorrecto = false;
             }
             catch { }
             e.Handled = incorrecto;
@@ -345,15 +346,16 @@ puedes ejecutar el siguiente script a la entrada del mapa:
                 else
                 {
                     if (!verTrasero)
-                        imgPokemon.Image = pkmOri.ImgFrontalShiny.ToBitmap();
+                        imgPokemon.Image = pkmOri.ImgFrontal.ToBitmap(pkmOri.PaletaShiny);
                     else
-                        imgPokemon.Image = pkmOri.ImgTraseraShiny.ToBitmap();
+                        imgPokemon.Image = pkmOri.ImgTrasera.ToBitmap(pkmOri.PaletaShiny);
                 }
                 txtNombre.Text = pkmOri.Nombre;
                 txtNumPokedex.Text = "#" + pkmOri.NumeroPokedexNacional;
               //  MessageBox.Show(pkmOri.Descripcion);
             }
-
+            txblVidaTotalEspecie.Text = pkmOri.HpMaxima(Convert.ToByte(txtNivel.Text)) + "";
+            txtVidaQueTiene.Text = txblVidaTotalEspecie.Text;
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
@@ -362,7 +364,7 @@ puedes ejecutar el siguiente script a la entrada del mapa:
             if (Juego != null)
             {
                 ValidarNiveYVida();
-                new AplicarEnLaRom(((FrameWorkPokemonGBA.Pokemon)cmbPokemons.SelectedItem).NumeroPokedexNacional, Convert.ToUInt32(txtVidaQueTiene.Text), Convert.ToByte(txtNivel.Text), SumaStatus()).Show();
+                new AplicarEnLaRom(((FrameWorkPokemonGBA.Pokemon)cmbPokemons.SelectedItem).NumeroPokedexNacional, Convert.ToInt32(txtVidaQueTiene.Text), Convert.ToByte(txtNivel.Text), SumaStatus()).Show();
 
 
             }
@@ -438,18 +440,22 @@ puedes ejecutar el siguiente script a la entrada del mapa:
 
         }
 
-        private void txtZTurns_PreviewTextInput(object sender, TextCompositionEventArgs e)
+
+        private void txtNivel_PreviewTextInput(object sender, KeyboardEventArgs e)
         {
-            int numTurnos;
-            txtVidaQueTiene_PreviewTextInput(sender, e);
-            if (!e.Handled)
+            const byte NIVELLMAX = 100;
+            byte nivell = byte.MinValue;
+            try
             {
-                numTurnos = Convert.ToInt32(e.Text);
-                e.Handled = numTurnos > 7 || numTurnos < 0;
-                estados[0].EstadoOn = numTurnos > 0;
+              nivell=Convert.ToByte(txtNivel.Text);
+            }catch { }
+            if(nivell>byte.MinValue&&nivell<=NIVELLMAX)
+            {
+                txblVidaTotalEspecie.Text = (cmbPokemons.SelectedItem as FrameWorkPokemonGBA.Pokemon).HpMaxima(nivell) + "";
+                if (Convert.ToInt32(txtVidaQueTiene.Text) > Convert.ToInt32(txblVidaTotalEspecie.Text))
+                    txtVidaQueTiene.Text = txblVidaTotalEspecie.Text;
+
             }
-            if (e.Text == "")
-                estados[0].EstadoOn = false;
         }
     }
 }
