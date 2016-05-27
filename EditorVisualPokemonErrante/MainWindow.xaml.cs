@@ -54,7 +54,7 @@ Si por algún motivo quieres que aparezca en un mapa fuera de ese banco (una cue
 puedes ejecutar el siguiente script a la entrada del mapa:
 */
         public MainWindow()
-        { 
+        {
 
             MenuItem cargar = new MenuItem() { Header = "Cargar Juego" }, backup = new MenuItem() { Header = "Hacer BackUp" };
             Estados[] enumEstados = (Estados[])Enum.GetValues(typeof(Estados));
@@ -103,7 +103,7 @@ puedes ejecutar el siguiente script a la entrada del mapa:
                 }
                 if (MainWindow.Juego != null)
                 {
-                    cmbPokemons.ItemsSource = MainWindow.Juego.Pokedex.Filtra((pokemonAMirar)=> { return pokemonAMirar.EsUnPokemon; });
+                    cmbPokemons.ItemsSource = MainWindow.Juego.Pokedex.Filtra((pokemonAMirar) => { return pokemonAMirar.EsUnPokemon; });
                     cmbPokemons.SelectedIndex = 1;
                 }
                 PonRuta();
@@ -122,28 +122,29 @@ puedes ejecutar el siguiente script a la entrada del mapa:
             }
             this.KeyDown += (sender, e) =>
             {
-				switch (e.Key) {
-					case Key.S:
-						verShiny = !verShiny;
-						selectedIndex = cmbPokemons.SelectedIndex;
-						cmbPokemons.SelectedIndex = 0;
-						cmbPokemons.SelectedIndex = selectedIndex;
-						break;
-					case Key.T:
-						verTrasero = !verTrasero;
-						selectedIndex = cmbPokemons.SelectedIndex;
-						cmbPokemons.SelectedIndex = 0;
-						cmbPokemons.SelectedIndex = selectedIndex;
-						break;
-					case Key.Up:
-						if (cmbPokemons.SelectedIndex > 0)
-							cmbPokemons.SelectedIndex--;
-						break;
-					case Key.Down:
-						if (cmbPokemons.SelectedIndex < cmbPokemons.Items.Count)
-							cmbPokemons.SelectedIndex++;
-						break;
-				}
+                switch (e.Key)
+                {
+                    case Key.S:
+                        verShiny = !verShiny;
+                        selectedIndex = cmbPokemons.SelectedIndex;
+                        cmbPokemons.SelectedIndex = 0;
+                        cmbPokemons.SelectedIndex = selectedIndex;
+                        break;
+                    case Key.T:
+                        verTrasero = !verTrasero;
+                        selectedIndex = cmbPokemons.SelectedIndex;
+                        cmbPokemons.SelectedIndex = 0;
+                        cmbPokemons.SelectedIndex = selectedIndex;
+                        break;
+                    case Key.Up:
+                        if (cmbPokemons.SelectedIndex > 0)
+                            cmbPokemons.SelectedIndex--;
+                        break;
+                    case Key.Down:
+                        if (cmbPokemons.SelectedIndex < cmbPokemons.Items.Count)
+                            cmbPokemons.SelectedIndex++;
+                        break;
+                }
             };
         }
 
@@ -323,10 +324,12 @@ puedes ejecutar el siguiente script a la entrada del mapa:
             try
             {
                 number = Convert.ToInt32(((TextBox)sender).Text);
-                if(number<Convert.ToInt32(txblVidaTotalEspecie.Text))
-                  incorrecto = false;
+                if (number < Convert.ToInt32(txblVidaTotalEspecie.Text))
+                    incorrecto = false;
+                else if (number > MAXVIDA)
+                    txtVidaQueTiene.Text = MAXVIDA + "";
             }
-            catch { }
+            catch { txtVidaQueTiene.Text = MAXVIDA + ""; }
             e.Handled = incorrecto;
         }
 
@@ -352,7 +355,7 @@ puedes ejecutar el siguiente script a la entrada del mapa:
                 }
                 txtNombre.Text = pkmOri.Nombre;
                 txtNumPokedex.Text = "#" + pkmOri.NumeroPokedexNacional;
-              //  MessageBox.Show(pkmOri.Descripcion);
+                //  MessageBox.Show(pkmOri.Descripcion);
             }
             txblVidaTotalEspecie.Text = pkmOri.HpMaxima(Convert.ToByte(txtNivel.Text)) + "";
             txtVidaQueTiene.Text = txblVidaTotalEspecie.Text;
@@ -443,19 +446,30 @@ puedes ejecutar el siguiente script a la entrada del mapa:
 
         private void txtNivel_PreviewTextInput(object sender, KeyboardEventArgs e)
         {
-            const byte NIVELLMAX = 100;
-            byte nivell = byte.MinValue;
+            const byte NIVELLMAX = 100,NIVELLMIN=1;
+            int nivell = NIVELLMIN;
             try
             {
-              nivell=Convert.ToByte(txtNivel.Text);
-            }catch { }
-            if(nivell>byte.MinValue&&nivell<=NIVELLMAX)
-            {
-                txblVidaTotalEspecie.Text = (cmbPokemons.SelectedItem as FrameWorkPokemonGBA.Pokemon).HpMaxima(nivell) + "";
-                if (Convert.ToInt32(txtVidaQueTiene.Text) > Convert.ToInt32(txblVidaTotalEspecie.Text))
-                    txtVidaQueTiene.Text = txblVidaTotalEspecie.Text;
-
+                nivell = Convert.ToInt32(txtNivel.Text);
             }
+            catch { }
+            if (nivell < NIVELLMIN)
+            {
+                nivell = NIVELLMIN;
+            }
+
+            else if (nivell > NIVELLMAX)
+            {
+                nivell = NIVELLMAX;
+            }
+            txtNivel.Text = nivell + "";
+
+            txblVidaTotalEspecie.Text = (cmbPokemons.SelectedItem as FrameWorkPokemonGBA.Pokemon).HpMaxima(Convert.ToByte(nivell)) + "";
+            if (Convert.ToInt32(txtVidaQueTiene.Text) > Convert.ToInt32(txblVidaTotalEspecie.Text))
+                txtVidaQueTiene.Text = txblVidaTotalEspecie.Text;
+
+
+
         }
     }
 }
