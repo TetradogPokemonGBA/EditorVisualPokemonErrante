@@ -14,6 +14,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Gabriel.Cat.Extension;
+using PokemonGBAFrameWork;
+
 namespace EditorVisualPokemonErrante
 {
     /// <summary>
@@ -50,7 +52,7 @@ namespace EditorVisualPokemonErrante
          
                 if (MainWindow.Juego != null)
                 {
-                    IsEsmeraldaRow = MainWindow.Juego.Version==FrameWorkPokemonGBA.RomPokemon.VersionRom.Esmeralda;
+                    IsEsmeraldaRow = Edicion.GetEdicion(MainWindow.Juego).AbreviacionRom==Edicion.ABREVIACIONESMERALDA;
                 }
                 for (int i = 0; i < campos.Length; i++)
                     campos[i].IsReadOnly = MainWindow.Juego == null;
@@ -139,7 +141,7 @@ namespace EditorVisualPokemonErrante
         }
         public static byte[,] ToByteMatriu(FilaRuta[] filas)
         {
-            byte[,] matriz = new byte[MainWindow.Juego.PokemonErrante.ColumnasFila, filas.Length];
+            byte[,] matriz = new byte[PokemonErrante.Ruta.MAXLENGTH, filas.Length];
             byte[] filaByteArray;
          
             for (int i=0;i<filas.Length;i++)

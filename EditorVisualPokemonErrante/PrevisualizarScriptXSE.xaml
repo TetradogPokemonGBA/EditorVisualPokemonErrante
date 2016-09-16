@@ -4,21 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Height="294.916" Width="349.103" ResizeMode="CanMinimize" WindowStyle="ToolWindow" WindowStartupLocation="Manual">
-
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0">
-            <Image x:Name="imgVersionR" MaxHeight="150"/>
-            <TextBox x:Name="txtScriptR" IsReadOnly="True"/>
+        Height="300" Width="320" ResizeMode="CanMinimize" WindowStyle="ToolWindow" WindowStartupLocation="Manual">
+    <StackPanel>
+            <Image x:Name="imgVersion" MaxHeight="150"/>
+            <TextBox x:Name="txtScript" IsReadOnly="True"/>
         </StackPanel>
-        <StackPanel Grid.Column="1">
-            <Image x:Name="imgVersionE" MaxHeight="150"/>
-            <TextBox x:Name="txtScriptE" IsReadOnly="True"/>
-        </StackPanel>
-    </Grid>
-
 </Window>

@@ -111,10 +111,7 @@
                         <!--lista de pokemons-->
                         <!--Poder ver la vista previa del script y en forma de bytes en HEX-->
                         <MenuItem Header="Exportar">
-                            <MenuItem x:Name="exportarXSE" Header="XSE">
-                                <MenuItem Header="RojoFuego/VerdeHoja" Click="exportarFRXSE_Click"/>
-                                <MenuItem Header="Esmeralda" Click="exportarEXSE_Click"/>
-                            </MenuItem>
+                            <MenuItem x:Name="exportarXSE" Header="XSE" Click="exportarFRXSE_Click"/>
                             <MenuItem x:Name="exportarEVPE" Header="EVPEP1" Click="exportarEVPE_Click" />
                         </MenuItem>
                         <MenuItem Header="Importar">

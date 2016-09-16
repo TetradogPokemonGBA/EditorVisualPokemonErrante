@@ -9,7 +9,7 @@ using System.IO;
 using Microsoft.Win32;
 using Gabriel.Cat;
 using System.Threading;
-
+using PokemonGBAFrameWork;
 namespace EditorVisualPokemonErrante
 {
     public enum Estados : short
@@ -24,7 +24,8 @@ namespace EditorVisualPokemonErrante
     {//en un futuro toda la informacion se sacara de la rom!! asi es mas realista ya que son roms editadas y claro posiblemente tendran los pokemons cambiados!! por ejemplo el orden,imagen,nombre,nuevos,menos...etc..
      //en un futuro la parte de los mapas sera con los nombres y las miniaturas ;) asi es mas visual!!
      //Busca los pointers 58 6C 46 08 en FR, o 04 1A 5D 08 en esmeralda // A0 00 00 -> 00 00 A0 08
-        static FrameWorkPokemonGBA.RomPokemon juego;
+        static RomGBA juego;
+        static RomData juegoData;
         internal static event EventHandler JuegoUpdated;
         Gabriel.Cat.Wpf.SwitchImg[] estados;
         private readonly int MAXNIVEL = 100;
@@ -58,6 +59,7 @@ puedes ejecutar el siguiente script a la entrada del mapa:
 
             MenuItem cargar = new MenuItem() { Header = "Cargar Juego" }, backup = new MenuItem() { Header = "Hacer BackUp" };
             Estados[] enumEstados = (Estados[])Enum.GetValues(typeof(Estados));
+            
             int selectedIndex;
             estados = new Gabriel.Cat.Wpf.SwitchImg[enumEstados.Length];
             InitializeComponent();
@@ -83,12 +85,13 @@ puedes ejecutar el siguiente script a la entrada del mapa:
             gridImgDor.Children.Add(estados[0]);
             JuegoUpdated += (s, e) =>
             {
+                int total=PokemonGBAFrameWork.Pokemon.TotalPokemon(MainWindow.Juego);
                 if (MainWindow.Juego == null)
                 {
                     Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.White);
                     imgIcoJuego.SetImage(new Bitmap(1, 1));
                 }
-                else if (MainWindow.Juego.Version == FrameWorkPokemonGBA.RomPokemon.VersionRom.Esmeralda)
+                else if (Edicion.GetEdicion(MainWindow.Juego).AbreviacionRom.Equals(Edicion.ABREVIACIONESMERALDA))
                 {
 
                     Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Black);
@@ -103,7 +106,11 @@ puedes ejecutar el siguiente script a la entrada del mapa:
                 }
                 if (MainWindow.Juego != null)
                 {
-                    cmbPokemons.ItemsSource = MainWindow.Juego.Pokedex.Filtra((pokemonAMirar) => { return pokemonAMirar.EsUnPokemon; });
+                    if(JuegoData.Pokedex[0].OrdenPokedexNacional==151)
+                       JuegoData.Pokedex[0].OrdenPokedexNacional = 0;//es misigno que lo detecta como MEW
+                    PokemonGBAFrameWork.Pokemon.Orden = PokemonGBAFrameWork.Pokemon.OrdenPokemon.Nacional;
+                    JuegoData.Pokedex.Ordena();
+                    cmbPokemons.ItemsSource =PokemonGBAFrameWork.Pokemon.FiltroSinNoPokes(MainWindow.Juego,JuegoData.Edicion,JuegoData.Compilacion,JuegoData.Pokedex); 
                     cmbPokemons.SelectedIndex = 1;
                 }
                 PonRuta();
@@ -122,29 +129,37 @@ puedes ejecutar el siguiente script a la entrada del mapa:
             }
             this.KeyDown += (sender, e) =>
             {
-                switch (e.Key)
-                {
-                    case Key.S:
-                        verShiny = !verShiny;
-                        selectedIndex = cmbPokemons.SelectedIndex;
-                        cmbPokemons.SelectedIndex = 0;
-                        cmbPokemons.SelectedIndex = selectedIndex;
-                        break;
-                    case Key.T:
-                        verTrasero = !verTrasero;
-                        selectedIndex = cmbPokemons.SelectedIndex;
-                        cmbPokemons.SelectedIndex = 0;
-                        cmbPokemons.SelectedIndex = selectedIndex;
-                        break;
-                    case Key.Up:
-                        if (cmbPokemons.SelectedIndex > 0)
-                            cmbPokemons.SelectedIndex--;
-                        break;
-                    case Key.Down:
-                        if (cmbPokemons.SelectedIndex < cmbPokemons.Items.Count)
-                            cmbPokemons.SelectedIndex++;
-                        break;
-                }
+                
+                    switch (e.Key)
+                    {
+                        case Key.S:
+                        if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+                        {
+                            verShiny = !verShiny;
+                            selectedIndex = cmbPokemons.SelectedIndex;
+                            cmbPokemons.SelectedIndex = 0;
+                            cmbPokemons.SelectedIndex = selectedIndex;
+                        }
+                            break;
+                        case Key.T:
+                        if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+                        {
+                            verTrasero = !verTrasero;
+                            selectedIndex = cmbPokemons.SelectedIndex;
+                            cmbPokemons.SelectedIndex = 0;
+                            cmbPokemons.SelectedIndex = selectedIndex;
+                        }
+                            break;
+                        case Key.Up:
+                            if (cmbPokemons.SelectedIndex > 0)
+                                cmbPokemons.SelectedIndex--;
+                            break;
+                        case Key.Down:
+                            if (cmbPokemons.SelectedIndex < cmbPokemons.Items.Count)
+                                cmbPokemons.SelectedIndex++;
+                            break;
+                    }
+                
             };
         }
 
@@ -165,15 +180,25 @@ puedes ejecutar el siguiente script a la entrada del mapa:
 
         public static void PideJuego()
         {
-            FrameWorkPokemonGBA.RomPokemon romCargada = null;
+            RomGBA romCargada = null;
+            PokemonErrante.Ruta[] rutasPokemonErrante;
             OpenFileDialog openFileDialog = new OpenFileDialog();
             bool? open = openFileDialog.ShowDialog();
+            bool compatible;
             try
             {
                 if (open.HasValue && open.Value)
                 {
-                    romCargada = new FrameWorkPokemonGBA.RomPokemon(openFileDialog.FileName);
-                    if (!romCargada.EsCompatiblePokemonErrante)
+                    romCargada = new RomGBA(new FileInfo(openFileDialog.FileName));
+                  
+                    try
+                    {
+                        rutasPokemonErrante=PokemonErrante.Ruta.GetRutas(romCargada, Edicion.GetEdicion(romCargada), CompilacionRom.GetCompilacion(romCargada));
+                        //pongo las rutas :D
+                        compatible = true;
+                    }
+                    catch { compatible = false; }
+                    if (!compatible)
                     {
                         MessageBox.Show("La ROM no es compatible");
                         if (MainWindow.Juego != null)
@@ -197,16 +222,35 @@ puedes ejecutar el siguiente script a la entrada del mapa:
             catch { MessageBox.Show("El archivo esta ocupado por otro programa, cierrelo y vuelve a intentarlo"); }
         }
 
-        public static FrameWorkPokemonGBA.RomPokemon Juego
+        public static RomGBA Juego
         {
             get { return juego; }
-            set { juego = value; if (JuegoUpdated != null) JuegoUpdated(null, null); }
+            set {
+                if (value == null) throw new ArgumentNullException();
+                  juego = value;
+                  JuegoData = RomData.GetRomData(juego);
+                if (JuegoUpdated != null) JuegoUpdated(null, null);
+            }
         }
+
+        public static RomData JuegoData
+        {
+            get
+            {
+                return juegoData;
+            }
+
+           private set
+            {
+                juegoData = value;
+            }
+        }
+
         public static void SaveJuego()
         {
 
-            if (MainWindow.Juego != null && MainWindow.Juego.SePuedeModificar)
-                MainWindow.Juego.Save();
+            if (MainWindow.Juego != null&&MainWindow.Juego.SePuedeModificar)
+                MainWindow.Juego.Guardar();
             else
                 MessageBox.Show("No se ha podido modificar el juego, debes de tener algun programa que lo usa!");
 
@@ -214,17 +258,13 @@ puedes ejecutar el siguiente script a la entrada del mapa:
 
         private void exportarFRXSE_Click(object sender, RoutedEventArgs e)
         {
-            ExportarXSE("FR", PreviewScripXSE().txtScriptR.Text);
+            ExportarXSE(PreviewScripXSE().txtScript.Text);
 
         }
-        private void exportarEXSE_Click(object sender, RoutedEventArgs e)
-        {
-            ExportarXSE("E", PreviewScripXSE().txtScriptR.Text);
 
-        }
-        private void ExportarXSE(string version, string script)
+        private void ExportarXSE(string script)
         {
-            string path = GenerarNombreScript() + "-" + version + ".rbc";
+            string path = GenerarNombreScript() + "-" + JuegoData.Edicion.AbreviacionRom+JuegoData.Edicion.InicialIdioma + ".rbc";
             FileStream fs = new FileStream(path, FileMode.Create);
             StreamWriter sw = new StreamWriter(fs);
             sw.Write(script);
@@ -234,12 +274,15 @@ puedes ejecutar el siguiente script a la entrada del mapa:
 
         private string GenerarNombreScript()
         {
-            return "script-PokemonErrante " + txtNombre.Text + " " + txtNumPokedex.Text.Substring(1) + "-" + DateTime.Now.Ticks;
+            string nombre = txtNombre.Text;
+            if (txtNumPokedex.Text == "#0" && nombre.Contains("?"))
+                nombre = "Missigno";
+            return "script-PokemonErrante " + nombre + " " + txtNumPokedex.Text.Substring(1) + "-" + DateTime.Now.Ticks;
         }
 
         private void exportarEVPE_Click(object sender, RoutedEventArgs e)
         {
-            scriptEVPE script = new scriptEVPE(Convert.ToInt16(((Pokemon)cmbPokemons.SelectedItem).NumeroNacional), Convert.ToInt16(txtVidaQueTiene.Text), Convert.ToByte(txtNivel.Text), SumaStatus());
+            scriptEVPE script = new scriptEVPE(Convert.ToInt16(((PokemonGBAFrameWork.Pokemon)cmbPokemons.SelectedItem).OrdenPokedexNacional+1), Convert.ToInt16(txtVidaQueTiene.Text), Convert.ToByte(txtNivel.Text), SumaStatus());
             scriptEVPE.GetByteArray(script).Save(GenerarNombreScript() + ".evpep1");
         }
 
@@ -286,7 +329,7 @@ puedes ejecutar el siguiente script a la entrada del mapa:
             ValidarNiveYVida();
             nivel = Convert.ToInt32(txtNivel.Text);
             vida = Convert.ToInt32(txtVidaQueTiene.Text);
-            return new PrevisualizarScriptXSE((cmbPokemons.SelectedItem as FrameWorkPokemonGBA.Pokemon).NumeroPokedexNacional, vida, Convert.ToByte(nivel), SumaStatus());
+            return new PrevisualizarScriptXSE(new PokemonErrante.Pokemon((cmbPokemons.SelectedItem as PokemonGBAFrameWork.Pokemon), vida, Convert.ToByte(nivel), SumaStatus()));
         }
 
         private void ValidarNiveYVida()
@@ -336,29 +379,29 @@ puedes ejecutar el siguiente script a la entrada del mapa:
         private void cmbPokemons_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
-            FrameWorkPokemonGBA.Pokemon pkmOri = ((ComboBox)sender).SelectedItem as FrameWorkPokemonGBA.Pokemon;
+            PokemonGBAFrameWork.Pokemon pkmOri = ((ComboBox)sender).SelectedItem as PokemonGBAFrameWork.Pokemon;
             if (pkmOri != null)
             {
                 if (!verShiny)
                 {
                     if (!verTrasero)
-                        imgPokemon.Image = pkmOri.ImgFrontal.ToBitmap();
+                        imgPokemon.Image = pkmOri.Sprites.ImagenFrontalNormal;
                     else
-                        imgPokemon.Image = pkmOri.ImgTrasera.ToBitmap();
+                        imgPokemon.Image = pkmOri.Sprites.ImagenTraseraNormal;
                 }
                 else
                 {
                     if (!verTrasero)
-                        imgPokemon.Image = pkmOri.ImgFrontal.ToBitmap(pkmOri.PaletaShiny);
+                        imgPokemon.Image = pkmOri.Sprites.ImagenFrontalShiny;
                     else
-                        imgPokemon.Image = pkmOri.ImgTrasera.ToBitmap(pkmOri.PaletaShiny);
+                        imgPokemon.Image = pkmOri.Sprites.ImagenTraseraShiny;
                 }
                 txtNombre.Text = pkmOri.Nombre;
-                txtNumPokedex.Text = "#" + pkmOri.NumeroPokedexNacional;
-                //  MessageBox.Show(pkmOri.Descripcion);
+                txtNumPokedex.Text = "#" + pkmOri.OrdenPokedexNacional;
+                txblVidaTotalEspecie.Text = pkmOri.HpMaxima(Convert.ToByte(txtNivel.Text)) + "";
+                txtVidaQueTiene.Text = txblVidaTotalEspecie.Text;
             }
-            txblVidaTotalEspecie.Text = pkmOri.HpMaxima(Convert.ToByte(txtNivel.Text)) + "";
-            txtVidaQueTiene.Text = txblVidaTotalEspecie.Text;
+            
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
@@ -367,7 +410,7 @@ puedes ejecutar el siguiente script a la entrada del mapa:
             if (Juego != null)
             {
                 ValidarNiveYVida();
-                new AplicarEnLaRom(((FrameWorkPokemonGBA.Pokemon)cmbPokemons.SelectedItem).NumeroPokedexNacional, Convert.ToInt32(txtVidaQueTiene.Text), Convert.ToByte(txtNivel.Text), SumaStatus()).Show();
+                new AplicarEnLaRom(((PokemonGBAFrameWork.Pokemon)cmbPokemons.SelectedItem), Convert.ToInt32(txtVidaQueTiene.Text), Convert.ToByte(txtNivel.Text), SumaStatus()).Show();
 
 
             }
@@ -394,7 +437,7 @@ puedes ejecutar el siguiente script a la entrada del mapa:
             PideSiNoEstaElJuego();
             if (MainWindow.Juego != null)
             {
-                MainWindow.Juego.PokemonErrante.TablaRutas = FilaRuta.ToByteMatriu(stkPanelFilasRutas.Children.Casting<FilaRuta>().ToTaula());
+              //  MainWindow.Juego.PokemonErrante.TablaRutas = FilaRuta.ToByteMatriu(stkPanelFilasRutas.Children.Casting<FilaRuta>().ToTaula());
                 PonRutaInfo();
             }
 
@@ -407,11 +450,11 @@ puedes ejecutar el siguiente script a la entrada del mapa:
                 {
                     PonRutaInfo();
                     stkPanelFilasRutas.Children.Clear();
-                    foreach (FilaRuta fila in FilaRuta.ToFilaRutaArray(MainWindow.Juego.PokemonErrante.TablaRutas))
+              /*      foreach (FilaRuta fila in FilaRuta.ToFilaRutaArray(MainWindow.Juego.PokemonErrante.TablaRutas))
                     {
                         fila.Click += QuitarFilaClick;
                         stkPanelFilasRutas.Children.Add(fila);
-                    }
+                    }*/
                     //pongo el cmb los mapas!!
                 }
             }
@@ -428,8 +471,8 @@ puedes ejecutar el siguiente script a la entrada del mapa:
         {
             if (MainWindow.Juego != null)
             {
-                txtOffsetTablaRutas.Text = (Hex)MainWindow.Juego.PokemonErrante.OffsetTabla;
-                txtNumeroDeFilas.Text = MainWindow.Juego.PokemonErrante.NFilasRutas + "";
+              //  txtOffsetTablaRutas.Text = (Hex)MainWindow.Juego.PokemonErrante.OffsetTabla;
+               // txtNumeroDeFilas.Text = MainWindow.Juego.PokemonErrante.NFilasRutas + "";
             }
         }
 
@@ -464,7 +507,7 @@ puedes ejecutar el siguiente script a la entrada del mapa:
             }
             txtNivel.Text = nivell + "";
 
-            txblVidaTotalEspecie.Text = (cmbPokemons.SelectedItem as FrameWorkPokemonGBA.Pokemon).HpMaxima(Convert.ToByte(nivell)) + "";
+            txblVidaTotalEspecie.Text = (cmbPokemons.SelectedItem as PokemonGBAFrameWork.Pokemon).HpMaxima(Convert.ToByte(nivell)) + "";
             if (Convert.ToInt32(txtVidaQueTiene.Text) > Convert.ToInt32(txblVidaTotalEspecie.Text))
                 txtVidaQueTiene.Text = txblVidaTotalEspecie.Text;
 
