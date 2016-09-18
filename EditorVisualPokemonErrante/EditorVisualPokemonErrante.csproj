@@ -44,16 +44,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Gabriel.Cat.Binaris\bin\Release\Gabriel.Cat.Binaris.dll</HintPath>
     </Reference>
-    <Reference Include="Gabriel.Cat.Utilitats">
+    <Reference Include="Gabriel.Cat.Utilitats, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Gabriel.Cat.Utilitats\Gabriel.Cat.Utilitats\bin\Release\Gabriel.Cat.Utilitats.dll</HintPath>
     </Reference>
     <Reference Include="Gabriel.Cat.Wpf, Version=1.0.5960.9908, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Gabriel.Cat.Wpf\Gabriel.Cat.Wpf\bin\Release\Gabriel.Cat.Wpf.dll</HintPath>
-    </Reference>
-    <Reference Include="PokemonGBAFrameWork, Version=1.0.6103.18748, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Documentos\SharpDevelop Projects\PokemonGBAFrameWork\PokemonGBAFrameWork\bin\Release\PokemonGBAFrameWork.exe</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -168,6 +165,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="iconoPokemonErrante.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="D:\Documentos\SharpDevelop Projects\PokemonGBAFrameWork\PokemonGBAFrameWork\PokemonGBAFrameWork.csproj">
+      <Project>{42256c23-1e9b-41e5-a5da-d3c6af6b824d}</Project>
+      <Name>PokemonGBAFrameWork</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
