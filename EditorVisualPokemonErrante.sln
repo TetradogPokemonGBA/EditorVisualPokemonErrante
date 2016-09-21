@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EditorVisualPokemonErrante"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokemonGBAFrameWork", "D:\Documentos\SharpDevelop Projects\PokemonGBAFrameWork\PokemonGBAFrameWork\PokemonGBAFrameWork.csproj", "{42256C23-1E9B-41E5-A5DA-D3C6AF6B824D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gabriel.Cat.Utilitats", "..\Gabriel.Cat.Utilitats\Gabriel.Cat.Utilitats\Gabriel.Cat.Utilitats.csproj", "{6FDF9BB1-AE07-4820-BEEE-A2F52CFBE770}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{42256C23-1E9B-41E5-A5DA-D3C6AF6B824D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42256C23-1E9B-41E5-A5DA-D3C6AF6B824D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42256C23-1E9B-41E5-A5DA-D3C6AF6B824D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FDF9BB1-AE07-4820-BEEE-A2F52CFBE770}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FDF9BB1-AE07-4820-BEEE-A2F52CFBE770}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FDF9BB1-AE07-4820-BEEE-A2F52CFBE770}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FDF9BB1-AE07-4820-BEEE-A2F52CFBE770}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

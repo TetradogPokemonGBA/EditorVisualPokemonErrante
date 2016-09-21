@@ -92,7 +92,7 @@ namespace EditorVisualPokemonErrante
         {
             if (MainWindow.Juego.SePuedeModificar)
             {
-                PokemonGBAFrameWork.PokemonErrante.Pokemon.SetPokemonScript(MainWindow.Juego,Edicion.GetEdicion(MainWindow.Juego),CompilacionRom.GetCompilacion(MainWindow.Juego),(Hex)txtOffset.Text, pokemon);
+                PokemonGBAFrameWork.PokemonErrante.Pokemon.SetPokemonScript(MainWindow.Juego,MainWindow.JuegoData.Edicion,MainWindow.JuegoData.Compilacion,(Hex)txtOffset.Text, pokemon);
                 MainWindow.SaveJuego();
             }
             else
@@ -150,7 +150,7 @@ namespace EditorVisualPokemonErrante
 
         private void PonSiEstaElJuego()
         {
-            int direccion;
+            Hex direccion;
             if (MainWindow.Juego != null)
             {
                 /* txtByteScript.Text = MainWindow.Juego.PokemonErrante.BytesScriptString(pokemon, vida, nivel, stat);
