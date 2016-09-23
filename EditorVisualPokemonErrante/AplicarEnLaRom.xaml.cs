@@ -46,7 +46,7 @@ namespace EditorVisualPokemonErrante
             grid.ContextMenu = new ContextMenu();
             grid.ContextMenu.Items.Add(cargar);
             grid.ContextMenu.Items.Add(backup);
-            cargar.Click += (s, e) =>MainWindow.PideJuego();
+            cargar.Click += (s, e) =>  MainWindow.PideJuego();
             backup.Click += (s, e) => { if (MainWindow.Juego != null) MainWindow.Juego.BackUp(); };
 
 
@@ -153,15 +153,17 @@ namespace EditorVisualPokemonErrante
             Hex direccion;
             if (MainWindow.Juego != null)
             {
-                /* txtByteScript.Text = MainWindow.Juego.PokemonErrante.BytesScriptString(pokemon, vida, nivel, stat);
-                 bytesScript= MainWindow.Juego.PokemonErrante.BytesScript(pokemon, vida, nivel, stat);*/
                 txtByteScript.Text = PokemonGBAFrameWork.PokemonErrante.Pokemon.BytesScriptString(MainWindow.Juego,MainWindow.JuegoData.Edicion,MainWindow.JuegoData.Compilacion,pokemon);
                 bytesScript = PokemonGBAFrameWork.PokemonErrante.Pokemon.BytesScript(MainWindow.Juego, MainWindow.JuegoData.Edicion, MainWindow.JuegoData.Compilacion, pokemon);
                 direccion = BloqueBytes.SearchBytes(MainWindow.Juego,bytesScript);
                 if (direccion > 0)
                 {
-                    txtOffset.Text = (Hex)direccion;
+                    txtOffset.Text = direccion;
                     btnBuscarEspacioLibre.Content = "Quitar";
+                }
+                else {
+                    txtOffset.Text = "";
+                    btnBuscarEspacioLibre.Content = "Aplicar";
                 }
                 PonImagen();
             }
