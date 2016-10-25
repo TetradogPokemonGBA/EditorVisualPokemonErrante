@@ -293,7 +293,7 @@ puedes ejecutar el siguiente script a la entrada del mapa:
             openFileDialog.Filter = "EVPE script part 1|*.evpep1";
             if (openFileDialog.ShowDialog().Value)
             {
-                script = scriptEVPE.GetScriptEVPE(new FileStream(openFileDialog.FileName, FileMode.Open));
+                script = scriptEVPE.GetScriptEVPE(new MemoryStream(new FileStream(openFileDialog.FileName, FileMode.Open).GetAllBytes()));
                 txtNivel.Text = script.Nivel.ToString();
                 txtVidaQueTiene.Text = script.Vida.ToString();
                 cmbPokemons.SelectedIndex = script.Pokemon - 1;

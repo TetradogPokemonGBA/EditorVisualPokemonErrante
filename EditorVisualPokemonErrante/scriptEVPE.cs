@@ -26,10 +26,10 @@ namespace EditorVisualPokemonErrante
         private scriptEVPE()
         {
 
-            base.PartesElemento.Afegir(Gabriel.Cat.Binaris.ElementoBinario.ElementosTipoAceptado(Gabriel.Cat.Serializar.TiposAceptados.Short));
-            base.PartesElemento.Afegir(Gabriel.Cat.Binaris.ElementoBinario.ElementosTipoAceptado(Gabriel.Cat.Serializar.TiposAceptados.Short));
-            base.PartesElemento.Afegir(Gabriel.Cat.Binaris.ElementoBinario.ElementosTipoAceptado(Gabriel.Cat.Serializar.TiposAceptados.Byte));
-            base.PartesElemento.Afegir(Gabriel.Cat.Binaris.ElementoBinario.ElementosTipoAceptado(Gabriel.Cat.Serializar.TiposAceptados.Byte));
+            base.PartesElemento.Add(Gabriel.Cat.Binaris.ElementoBinario.ElementosTipoAceptado(Gabriel.Cat.Serializar.TiposAceptados.Short));
+            base.PartesElemento.Add(Gabriel.Cat.Binaris.ElementoBinario.ElementosTipoAceptado(Gabriel.Cat.Serializar.TiposAceptados.Short));
+            base.PartesElemento.Add(Gabriel.Cat.Binaris.ElementoBinario.ElementosTipoAceptado(Gabriel.Cat.Serializar.TiposAceptados.Byte));
+            base.PartesElemento.Add(Gabriel.Cat.Binaris.ElementoBinario.ElementosTipoAceptado(Gabriel.Cat.Serializar.TiposAceptados.Byte));
         }
 
 
@@ -87,7 +87,7 @@ namespace EditorVisualPokemonErrante
         }
 
 
-        public override object GetObject(object[] parts)
+        protected override object GetObject(object[] parts)
         {
             return new scriptEVPE(Convert.ToInt16(parts[0]), Convert.ToInt16(parts[1]), Convert.ToByte(parts[2]), Convert.ToByte(parts[3]));
         }
@@ -115,7 +115,7 @@ namespace EditorVisualPokemonErrante
                 throw new ArgumentNullException();
             return  scriptSaver.GetBytes(script);
         }
-        public static scriptEVPE GetScriptEVPE(Stream stream)
+        public static scriptEVPE GetScriptEVPE(MemoryStream stream)
         {
             return (scriptEVPE)scriptSaver.GetObject(stream);
         }

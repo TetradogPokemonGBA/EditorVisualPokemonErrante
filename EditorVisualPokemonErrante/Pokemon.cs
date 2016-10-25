@@ -93,9 +93,12 @@ namespace EditorVisualPokemonErrante
             }
         }
 
-        public IComparable Clau()
+        public IComparable Clau
         {
-            return numeroNacional;
+            get
+            {
+                return numeroNacional;
+            }
         }
         public override string ToString()
         {
@@ -111,7 +114,7 @@ namespace EditorVisualPokemonErrante
         {
             int compareTo = -1;
             if (other != null)
-                compareTo = Clau().CompareTo(other.Clau());
+                compareTo = Clau.CompareTo(other.Clau);
             return compareTo;
         }
     }
