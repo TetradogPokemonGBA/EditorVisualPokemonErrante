@@ -81,7 +81,7 @@ puedes ejecutar el siguiente script a la entrada del mapa:
                 gridZTruns.Children.Add(imgsZ[i]);
                 Grid.SetColumn(imgsZ[i], i);
             }
-            uniGridEstados.Children.AddRange(estados.SubArray(1));
+            uniGridEstados.Children.AddRange(estados.SubList(1));
             gridImgDor.Children.Add(estados[0]);
             JuegoUpdated += (s, e) =>
             {
@@ -122,11 +122,7 @@ puedes ejecutar el siguiente script a la entrada del mapa:
             cargar.Click += (s, e) => PideJuego();
             backup.Click += (s, e) => { if (MainWindow.Juego != null) MainWindow.Juego.BackUp(); };
             PideJuego();
-            if (MainWindow.Juego == null)
-            {
-                MessageBox.Show("Se necesita una rom para sacar la informacion");
-                this.Close();
-            }
+          
             this.KeyDown += (sender, e) =>
             {
                 
@@ -161,6 +157,12 @@ puedes ejecutar el siguiente script a la entrada del mapa:
                     }
                 
             };
+
+            if (MainWindow.Juego == null)
+            {
+                MessageBox.Show("Se necesita una rom para sacar la informacion");
+                this.Close();
+            }
         }
 
         private void PonSleepTurn(object sender, bool e)
