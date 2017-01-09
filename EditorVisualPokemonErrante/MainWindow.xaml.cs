@@ -109,8 +109,7 @@ puedes ejecutar el siguiente script a la entrada del mapa:
                     if(JuegoData.Pokedex[0].OrdenPokedexNacional==151)
                        JuegoData.Pokedex[0].OrdenPokedexNacional = 0;//es misigno que lo detecta como MEW
                     PokemonGBAFrameWork.Pokemon.Orden = PokemonGBAFrameWork.Pokemon.OrdenPokemon.Nacional;
-                    JuegoData.Pokedex.Ordena();
-                    cmbPokemons.ItemsSource =PokemonGBAFrameWork.Pokemon.FiltroSinNoPokes(JuegoData.Pokedex); 
+                    cmbPokemons.ItemsSource =PokemonGBAFrameWork.Pokemon.FiltroSinNoPokes(JuegoData.Pokedex.Ordena()); 
                     cmbPokemons.SelectedIndex = 1;
                 }
                 PonRuta();
