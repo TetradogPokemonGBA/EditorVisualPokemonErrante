@@ -63,8 +63,6 @@ puedes ejecutar el siguiente script a la entrada del mapa:
             int selectedIndex;
             estados = new Gabriel.Cat.Wpf.SwitchImg[enumEstados.Length];
             InitializeComponent();
-
-            this.imgPokemon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             estados[0] = new Gabriel.Cat.Wpf.SwitchImg(Resource1.Dormido, Resource1.Dormido_Off) { Tag = (short)Estados.Dormido, CambiarHaciendoClick = false };
             estados[1] = new Gabriel.Cat.Wpf.SwitchImg(Resource1.Envenenado, Resource1.Envenenado_Off) { Tag = (short)Estados.Envenenado };
             estados[2] = new Gabriel.Cat.Wpf.SwitchImg(Resource1.Quemado, Resource1.Quemado_Off) { Tag = (short)Estados.Quemado };
@@ -229,7 +227,7 @@ puedes ejecutar el siguiente script a la entrada del mapa:
             set {
                 if (value == null) throw new ArgumentNullException();
                   juego = value;
-                  JuegoData = RomData.GetRomData(juego);
+                  JuegoData = new RomData(juego);
                 if (JuegoUpdated != null) JuegoUpdated(null, null);
             }
         }
@@ -386,20 +384,21 @@ puedes ejecutar el siguiente script a la entrada del mapa:
                 if (!verShiny)
                 {
                     if (!verTrasero)
-                        imgPokemon.Image = pkmOri.Sprites.ImagenFrontalNormal;
+                        imgPokemon.SetImage( pkmOri.Sprites.ImagenFrontalNormal);
                     else
-                        imgPokemon.Image = pkmOri.Sprites.ImagenTraseraNormal;
+                        imgPokemon.SetImage(pkmOri.Sprites.ImagenTraseraNormal);
                 }
                 else
                 {
                     if (!verTrasero)
-                        imgPokemon.Image = pkmOri.Sprites.ImagenFrontalShiny;
+                        imgPokemon.SetImage(pkmOri.Sprites.ImagenFrontalShiny);
                     else
-                        imgPokemon.Image = pkmOri.Sprites.ImagenTraseraShiny;
+                        imgPokemon.SetImage(pkmOri.Sprites.ImagenTraseraShiny);
                 }
                 txtNombre.Text = pkmOri.Nombre;
                 txtNumPokedex.Text = "#" + pkmOri.OrdenPokedexNacional;
-                txblVidaTotalEspecie.Text = pkmOri.HpMaxima(Convert.ToByte(txtNivel.Text)) + "";
+                txtNivel.Text="100";
+                txtNivel_PreviewTextInput();
                 txtVidaQueTiene.Text = txblVidaTotalEspecie.Text;
             }
             
@@ -488,10 +487,14 @@ puedes ejecutar el siguiente script a la entrada del mapa:
         }
 
 
-        private void txtNivel_PreviewTextInput(object sender, KeyboardEventArgs e)
+        private void txtNivel_PreviewTextInput(object sender=null, KeyboardEventArgs e=null)
         {
             const byte NIVELLMAX = 100,NIVELLMIN=1;
+            Ataque[] ataques;
+            PokemonGBAFrameWork.Pokemon pokemon = cmbPokemons.SelectedItem as PokemonGBAFrameWork.Pokemon;
             int nivell = NIVELLMIN;
+            if (pokemon == null)
+                pokemon = JuegoData.Pokedex[int.Parse(txtNumPokedex.Text.Substring(1))];
             try
             {
                 nivell = Convert.ToInt32(txtNivel.Text);
@@ -508,10 +511,13 @@ puedes ejecutar el siguiente script a la entrada del mapa:
             }
             txtNivel.Text = nivell + "";
 
-            txblVidaTotalEspecie.Text = (cmbPokemons.SelectedItem as PokemonGBAFrameWork.Pokemon).HpMaxima(Convert.ToByte(nivell)) + "";
+            txblVidaTotalEspecie.Text = pokemon.HpMaxima(Convert.ToByte(nivell)) + "";
             if (Convert.ToInt32(txtVidaQueTiene.Text) > Convert.ToInt32(txblVidaTotalEspecie.Text))
                 txtVidaQueTiene.Text = txblVidaTotalEspecie.Text;
-
+            uniGridAtaques.Children.Clear();
+            ataques = pokemon.AtaquesAprendidos.GetAtaques(nivell, MainWindow.JuegoData.Ataques);
+            for (int i = 0; i < ataques.Length; i++)
+                uniGridAtaques.Children.Add(new TextBlock() { Text = ataques[i].Nombre+" " });
 
 
         }

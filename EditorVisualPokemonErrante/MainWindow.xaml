@@ -43,10 +43,7 @@
                                 <RowDefinition Height="242*"/>
                                 <RowDefinition Height="19*"/>
                             </Grid.RowDefinitions>
-                            <wfi:WindowsFormsHost Grid.Row="0">
-                                <winForms:PictureBox x:Name="imgPokemon" >
-                                </winForms:PictureBox>
-                            </wfi:WindowsFormsHost>
+                            <Image x:Name="imgPokemon" Grid.Row="0"/>
 
                             <Grid Grid.Row="1">
                                 <Grid.ColumnDefinitions>
@@ -63,9 +60,11 @@
                         </Grid>
                         <Grid Grid.Column="1" >
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="66*"/>
-                                <RowDefinition Height="37*"/>
-                                <RowDefinition Height="158*"/>
+                                <RowDefinition Height="71*"/>
+                                <RowDefinition Height="27*"/>
+                                <RowDefinition Height="44*"/>
+                                <RowDefinition Height="26*"/>
+                                <RowDefinition Height="76*"/>
                             </Grid.RowDefinitions>
                             <Grid Grid.Row="0">
                                 <Grid.RowDefinitions>
@@ -100,7 +99,11 @@
                                 </Grid>
                                 <Grid Grid.Column="1" x:Name="gridImgDor"/>
                             </Grid>
-                            <UniformGrid Grid.Row="2" x:Name="uniGridEstados"/>
+                            <UniformGrid Grid.Row="2" x:Name="uniGridEstados" Columns="5"/>
+                            <TextBlock Text="Ataques que tendrá " HorizontalAlignment="Center" Grid.Row="3"/>
+                            <Viewbox Grid.Row="4">
+                                <UniformGrid  x:Name="uniGridAtaques" Columns="2"/>
+                            </Viewbox>
                             <!--mas adelante poner toda la info que se pueda personalizar del pokemon-->
 
                         </Grid>

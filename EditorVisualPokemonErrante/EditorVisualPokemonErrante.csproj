@@ -40,9 +40,14 @@
     <ApplicationIcon>iconoPokemonErrante.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Gabriel.Cat.Binaris, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Gabriel.Cat.Binaris\bin\Release\Gabriel.Cat.Binaris.dll</HintPath>
+    <Reference Include="Gabriel.Cat.Binaris">
+      <HintPath>..\..\..\..\..\Programas\Gabriel.Cat.Binaris\bin\Release\Gabriel.Cat.Binaris.dll</HintPath>
+    </Reference>
+    <Reference Include="Gabriel.Cat.Utilitats">
+      <HintPath>..\..\..\..\..\Programas\Gabriel.Cat.Utilitats\Gabriel.Cat.Utilitats\bin\Release\Gabriel.Cat.Utilitats.dll</HintPath>
+    </Reference>
+    <Reference Include="Gabriel.Cat.Wpf">
+      <HintPath>..\..\..\..\..\Programas\Gabriel.Cat.Wpf\Gabriel.Cat.Wpf\bin\Release\Gabriel.Cat.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -164,21 +169,13 @@
     <Resource Include="iconoPokemonErrante.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Gabriel.Cat.Utilitats\Gabriel.Cat.Utilitats\Gabriel.Cat.Utilitats.csproj">
-      <Project>{6fdf9bb1-ae07-4820-beee-a2f52cfbe770}</Project>
-      <Name>Gabriel.Cat.Utilitats</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Gabriel.Cat.Wpf\Gabriel.Cat.Wpf\Gabriel.Cat.Wpf.csproj">
-      <Project>{3933330c-b76a-4076-92ea-01f7a6dda58e}</Project>
-      <Name>Gabriel.Cat.Wpf</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PokemonGBAFrameWork\PokemonGBAFrameWork\PokemonGBAFrameWork.csproj">
-      <Project>{42256c23-1e9b-41e5-a5da-d3c6af6b824d}</Project>
-      <Name>PokemonGBAFrameWork</Name>
-    </ProjectReference>
+    <None Include="_CreateNewNuGetPackage\DoNotModify\NuGet.exe" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="_CreateNewNuGetPackage\DoNotModify\NuGet.exe" />
+    <ProjectReference Include="..\..\..\..\..\Programas\PokemonGBAFrameWork\PokemonGBAFrameWork\PokemonGBAFrameWork.csproj">
+      <Project>{42256C23-1E9B-41E5-A5DA-D3C6AF6B824D}</Project>
+      <Name>PokemonGBAFrameWork</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
