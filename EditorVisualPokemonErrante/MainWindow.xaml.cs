@@ -10,6 +10,9 @@ using Microsoft.Win32;
 using Gabriel.Cat;
 using System.Threading;
 using PokemonGBAFrameWork;
+using System.Collections;
+using System.Collections.Generic;
+
 namespace EditorVisualPokemonErrante
 {
     public enum Estados : short
@@ -83,34 +86,59 @@ puedes ejecutar el siguiente script a la entrada del mapa:
             gridImgDor.Children.Add(estados[0]);
             JuegoUpdated += (s, e) =>
             {
-                int total=PokemonGBAFrameWork.Pokemon.TotalPokemon(MainWindow.Juego);
+                Pokemon missigno;
+                int total;
+
                 if (MainWindow.Juego == null)
                 {
                     Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.White);
                     imgIcoJuego.SetImage(new Bitmap(1, 1));
                 }
-                else if (Edicion.GetEdicion(MainWindow.Juego).AbreviacionRom.Equals(Edicion.ABREVIACIONESMERALDA))
+                else if (RomData.Edicion.AbreviacionRom.Equals(Edicion.ABREVIACIONESMERALDA))
                 {
 
                     Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Black);
                     imgIcoJuego.SetImage(Resource1.Emerald);
                 }
-                else
+                else if(RomData.Edicion.AbreviacionRom.Equals(Edicion.ABREVIACIONROJOFUEGO))
                 {
 
                     Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Red);
                     imgIcoJuego.SetImage(Resource1.FireRed);
                     //pongo los pokemons!
                 }
+                else if (RomData.Edicion.AbreviacionRom.Equals(Edicion.ABREVIACIONVERDEHOJA))
+                {
+
+                    Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Green);
+                    imgIcoJuego.SetImage(Resource1.LeafGreen);
+                    //pongo los pokemons!
+                }
                 if (MainWindow.Juego != null)
                 {
-                    if(JuegoData.Pokedex[0].OrdenPokedexNacional==151)
-                       JuegoData.Pokedex[0].OrdenPokedexNacional = 0;//es misigno que lo detecta como MEW
+                    missigno = null;
+                    total= PokemonGBAFrameWork.Pokemon.TotalPokemon(MainWindow.Juego);
+                    if (RomData.Pokedex[0].OrdenPokedexNacional>0)
+                    {
+                        missigno=RomData.Pokedex[0];
+                        missigno.OrdenPokedexNacional = 0;//es misigno que lo detecta como MEW
+                        missigno.OrdenPokedexLocal = -2;
+                    }
                     PokemonGBAFrameWork.Pokemon.Orden = PokemonGBAFrameWork.Pokemon.OrdenPokemon.Nacional;
-                    cmbPokemons.ItemsSource =PokemonGBAFrameWork.Pokemon.FiltroSinNoPokes(JuegoData.Pokedex.Ordena()); 
-                    cmbPokemons.SelectedIndex = 1;
+                    cmbPokemons.ItemsSource =PokemonGBAFrameWork.Pokemon.FiltroSinNoPokes(RomData.Pokedex.Filtra((pokemon)=>pokemon.OrdenPokedexLocal>0&&pokemon.OrdenPokedexNacional>0&& pokemon.AtaquesAprendidos !=null && pokemon.AtaquesAprendidos.Ataques.Count>0).Ordena()); 
+
+                    if (missigno != null)
+                    {
+                        missigno.OrdenPokedexLocal = 0;
+                       ((List<Pokemon>) cmbPokemons.ItemsSource).Insert(0,missigno);
+                        cmbPokemons.SelectedIndex = 1;
+
+                    }
+                    else
+                       cmbPokemons.SelectedIndex = 0;
+                    PonRuta();
                 }
-                PonRuta();
+               
             };
             imgIcoJuego.MouseLeftButtonUp += (s, e) => PideJuego();
             grid.ContextMenu = new ContextMenu();
@@ -227,12 +255,12 @@ puedes ejecutar el siguiente script a la entrada del mapa:
             set {
                 if (value == null) throw new ArgumentNullException();
                   juego = value;
-                  JuegoData = new RomData(juego);
+                  RomData = new RomData(juego);
                 if (JuegoUpdated != null) JuegoUpdated(null, null);
             }
         }
 
-        public static RomData JuegoData
+        public static RomData RomData
         {
             get
             {
@@ -263,7 +291,7 @@ puedes ejecutar el siguiente script a la entrada del mapa:
 
         private void ExportarXSE(string script)
         {
-            string path = GenerarNombreScript() + "-" + JuegoData.Edicion.AbreviacionRom+JuegoData.Edicion.InicialIdioma + ".rbc";
+            string path = GenerarNombreScript() + "-" + RomData.Edicion.AbreviacionRom+RomData.Edicion.InicialIdioma + ".rbc";
             FileStream fs = new FileStream(path, FileMode.Create);
             StreamWriter sw = new StreamWriter(fs);
             sw.Write(script);
@@ -494,7 +522,7 @@ puedes ejecutar el siguiente script a la entrada del mapa:
             PokemonGBAFrameWork.Pokemon pokemon = cmbPokemons.SelectedItem as PokemonGBAFrameWork.Pokemon;
             int nivell = NIVELLMIN;
             if (pokemon == null)
-                pokemon = JuegoData.Pokedex[int.Parse(txtNumPokedex.Text.Substring(1))];
+                pokemon = RomData.Pokedex[int.Parse(txtNumPokedex.Text.Substring(1))];
             try
             {
                 nivell = Convert.ToInt32(txtNivel.Text);
@@ -515,7 +543,7 @@ puedes ejecutar el siguiente script a la entrada del mapa:
             if (Convert.ToInt32(txtVidaQueTiene.Text) > Convert.ToInt32(txblVidaTotalEspecie.Text))
                 txtVidaQueTiene.Text = txblVidaTotalEspecie.Text;
             uniGridAtaques.Children.Clear();
-            ataques = pokemon.AtaquesAprendidos.GetAtaques(nivell, MainWindow.JuegoData.Ataques);
+            ataques = pokemon.AtaquesAprendidos.GetAtaques(nivell, MainWindow.RomData.Ataques);
             for (int i = 0; i < ataques.Length; i++)
                 uniGridAtaques.Children.Add(new TextBlock() { Text = ataques[i].Nombre+" " });
 

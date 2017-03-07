@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EditorVisualPokemonErrante
 {
-    public class Pokemon:Gabriel.Cat.IClauUnicaPerObjecte,IComparable,IComparable<Pokemon>
+    public class PokemonErranteDatos:Gabriel.Cat.IClauUnicaPerObjecte,IComparable,IComparable<PokemonErranteDatos>
     {
         int vidaQueTiene;
         int[] vidaXNivel;//vida por nivel
@@ -15,7 +15,7 @@ namespace EditorVisualPokemonErrante
         Bitmap img;
         int numeroNacional;
 
-        public Pokemon(string nombre, Bitmap img, int numeroNacional)
+        public PokemonErranteDatos(string nombre, Bitmap img, int numeroNacional)
         {
             this.nombre = nombre.ToUpper();
             this.img = img;
@@ -107,10 +107,10 @@ namespace EditorVisualPokemonErrante
 
         public int CompareTo(object obj)
         {
-            return CompareTo(obj as Pokemon);
+            return CompareTo(obj as PokemonErranteDatos);
         }
 
-        public int CompareTo(Pokemon other)
+        public int CompareTo(PokemonErranteDatos other)
         {
             int compareTo = -1;
             if (other != null)

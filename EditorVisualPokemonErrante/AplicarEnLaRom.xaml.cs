@@ -92,7 +92,7 @@ namespace EditorVisualPokemonErrante
         {
             if (MainWindow.Juego.SePuedeModificar)
             {
-                PokemonGBAFrameWork.PokemonErrante.Pokemon.SetPokemonScript(MainWindow.Juego,MainWindow.JuegoData.Edicion,MainWindow.JuegoData.Compilacion,(Hex)txtOffset.Text, pokemon);
+                PokemonGBAFrameWork.PokemonErrante.Pokemon.SetPokemonScript(MainWindow.Juego,MainWindow.RomData.Edicion,MainWindow.RomData.Compilacion,(Hex)txtOffset.Text, pokemon);
                 MainWindow.SaveJuego();
             }
             else
@@ -153,8 +153,8 @@ namespace EditorVisualPokemonErrante
             Hex direccion;
             if (MainWindow.Juego != null)
             {
-                txtByteScript.Text = PokemonGBAFrameWork.PokemonErrante.Pokemon.BytesScriptString(MainWindow.Juego,MainWindow.JuegoData.Edicion,MainWindow.JuegoData.Compilacion,pokemon);
-                bytesScript = PokemonGBAFrameWork.PokemonErrante.Pokemon.BytesScript(MainWindow.Juego, MainWindow.JuegoData.Edicion, MainWindow.JuegoData.Compilacion, pokemon);
+                txtByteScript.Text = PokemonGBAFrameWork.PokemonErrante.Pokemon.BytesScriptString(MainWindow.Juego,MainWindow.RomData.Edicion,MainWindow.RomData.Compilacion,pokemon);
+                bytesScript = PokemonGBAFrameWork.PokemonErrante.Pokemon.BytesScript(MainWindow.Juego, MainWindow.RomData.Edicion, MainWindow.RomData.Compilacion, pokemon);
                 direccion = BloqueBytes.SearchBytes(MainWindow.Juego,bytesScript);
                 if (direccion > 0)
                 {

@@ -27,13 +27,13 @@ namespace EditorVisualPokemonErrante
         public PrevisualizarScriptXSE(PokemonGBAFrameWork.PokemonErrante.Pokemon pokemon)
         {
             InitializeComponent();
-            Title = "Scirpt Rom version Española";//mas adelante hacerlo universal :D
+            Title = "Scirpt Rom";
             this.pokemon = pokemon;
             PonScriptEImagen();
             MainWindow.JuegoUpdated += (s, e) => {
-                if (MainWindow.JuegoData.Pokedex.Count > pokemon.PokemonErrante.OrdenPokedexNacional)//si sigue valiendo el script
+                if (MainWindow.RomData.Pokedex.Count > pokemon.PokemonErrante.OrdenPokedexNacional)//si sigue valiendo el script
                 {
-                    pokemon = new PokemonErrante.Pokemon(MainWindow.JuegoData.Pokedex[pokemon.PokemonErrante.OrdenPokedexNacional], pokemon.Vida, pokemon.Nivel, pokemon.Stats);
+                    pokemon = new PokemonErrante.Pokemon(MainWindow.RomData.Pokedex[pokemon.PokemonErrante.OrdenPokedexNacional], pokemon.Vida, pokemon.Nivel, pokemon.Stats);
                     PonScriptEImagen();
                 }
                 else Close();
@@ -44,14 +44,14 @@ namespace EditorVisualPokemonErrante
 
         private void PonScriptEImagen()
         {
-            switch (MainWindow.JuegoData.Edicion.AbreviacionRom)
+            switch (MainWindow.RomData.Edicion.AbreviacionRom)
             {
                 case Edicion.ABREVIACIONROJOFUEGO:
                     imgVersion.SetImage(Resource1.FireRed); break;
                 case Edicion.ABREVIACIONESMERALDA:
                     imgVersion.SetImage(Resource1.Emerald); break;
             }
-            txtScript.Text = PokemonGBAFrameWork.PokemonErrante.Pokemon.Script(MainWindow.Juego, MainWindow.JuegoData.Edicion, MainWindow.JuegoData.Compilacion, pokemon);
+            txtScript.Text = PokemonGBAFrameWork.PokemonErrante.Pokemon.Script(MainWindow.Juego, MainWindow.RomData.Edicion, MainWindow.RomData.Compilacion, pokemon);
         }
     }
 }

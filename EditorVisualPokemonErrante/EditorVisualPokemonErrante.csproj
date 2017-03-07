@@ -132,7 +132,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resource1.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="imagenes\Estados Blanco y Negro\Congelado-Off.png" />
@@ -173,9 +173,12 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Programas\PokemonGBAFrameWork\PokemonGBAFrameWork\PokemonGBAFrameWork.csproj">
-      <Project>{42256C23-1E9B-41E5-A5DA-D3C6AF6B824D}</Project>
+      <Project>{42256c23-1e9b-41e5-a5da-d3c6af6b824d}</Project>
       <Name>PokemonGBAFrameWork</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="imagenes\LG_ico.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
