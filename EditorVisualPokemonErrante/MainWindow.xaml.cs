@@ -110,7 +110,7 @@ puedes ejecutar el siguiente script a la entrada del mapa:
                 else if (RomData.Edicion.AbreviacionRom.Equals(Edicion.ABREVIACIONVERDEHOJA))
                 {
 
-                    Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Green);
+                    Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 7 ,254 ,0));
                     imgIcoJuego.SetImage(Resource1.LeafGreen);
                     //pongo los pokemons!
                 }

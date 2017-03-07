@@ -50,6 +50,8 @@ namespace EditorVisualPokemonErrante
                     imgVersion.SetImage(Resource1.FireRed); break;
                 case Edicion.ABREVIACIONESMERALDA:
                     imgVersion.SetImage(Resource1.Emerald); break;
+                case Edicion.ABREVIACIONVERDEHOJA:
+                    imgVersion.SetImage(Resource1.LeafGreen);break;
             }
             txtScript.Text = PokemonGBAFrameWork.PokemonErrante.Pokemon.Script(MainWindow.Juego, MainWindow.RomData.Edicion, MainWindow.RomData.Compilacion, pokemon);
         }
