@@ -1,0 +1,170 @@
+﻿<Window x:Class="EditorVisualPokemonErrante.Core.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EditorVisualPokemonErrante.Core"
+        mc:Ignorable="d"
+        Title="Editor Visual Pokemon Errante  by pikachu240, investigado by Razhier" Height="350" Width="525" ResizeMode="CanMinimize" WindowStartupLocation="Manual" >
+    <Grid  x:Name="grid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="40*"/>
+            <ColumnDefinition Width="133*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="7*"/>
+            <RowDefinition Height="102*"/>
+        </Grid.RowDefinitions>
+        <Image Grid.Row="0" x:Name="imgIcoJuego" HorizontalAlignment="Left" Width="21" />
+        <!--  <Button Grid.Row="0" x:Name="btnCerrar" Background="Transparent" HorizontalAlignment="Right" Width="13" RenderTransformOrigin="0.455,-0.699" Margin="0,3,2,5"/>-->
+        <TabControl Grid.Row="1" x:Name="tab" Background="White" Grid.ColumnSpan="2">
+
+            <TabItem Header="Pokemon Errante" >
+                <!--Zona para crear el scrip y poderlo poner en una rom escogida i/o poderlo guardar en formato XSE estaria poder tambien importar aunque parece mas dificil aunque si se exporta como bytes y se importa luego es igual :D es mio-->
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="29*"/>
+                        <RowDefinition Height="3*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <!--Imagen Pokemon y nombre y numero en la pokedex nacional-->
+                        <!--Estados disponibles-->
+                        <!--Nivel-->
+                        <!--Vida-->
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="242*"/>
+                                <RowDefinition Height="19*"/>
+                            </Grid.RowDefinitions>
+                            <Image x:Name="imgPokemon" Grid.Row="0"/>
+
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="77*"/>
+                                    <ColumnDefinition Width="16*"/>
+                                    <ColumnDefinition Width="16*"/>
+                                    <ColumnDefinition Width="15*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" x:Name="txtNombre"/>
+                                <TextBlock Grid.Column="1" x:Name="txtNumPokedex"/>
+                                <TextBlock Grid.Column="2" Text="Nivel:"/>
+                                <TextBox Grid.Column="3" KeyUp="txtNivel_PreviewTextInput" x:Name="txtNivel" Text="100" Height="19" VerticalAlignment="Top" />
+                            </Grid>
+                        </Grid>
+                        <Grid Grid.Column="1" >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="71*"/>
+                                <RowDefinition Height="27*"/>
+                                <RowDefinition Height="44*"/>
+                                <RowDefinition Height="26*"/>
+                                <RowDefinition Height="76*"/>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="2*"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="STATS"  FontSize="20" HorizontalAlignment="Center"/>
+                                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                                    <TextBlock  Text="Vida " />
+                                    <TextBox x:Name="txtVidaQueTiene" KeyUp="txtVidaQueTiene_PreviewTextInput" Width="110" Text="100"/>
+                                    <TextBlock  Text="/"/>
+                                    <TextBlock x:Name="txblVidaTotalEspecie" Text="Total?"/>
+                                </StackPanel>
+
+                            </Grid>
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="190*"/>
+                                    <ColumnDefinition Width="63*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid Grid.Column="0" x:Name="gridZTruns">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="3*"/>
+                                        <ColumnDefinition Width="4*"/>
+                                        <ColumnDefinition Width="5*"/>
+                                        <ColumnDefinition Width="6*"/>
+                                        <ColumnDefinition Width="7*"/>
+                                        <ColumnDefinition Width="9*"/>
+                                    </Grid.ColumnDefinitions>
+                                </Grid>
+                                <Grid Grid.Column="1" x:Name="gridImgDor"/>
+                            </Grid>
+                            <UniformGrid Grid.Row="2" x:Name="uniGridEstados" Columns="5"/>
+                            <TextBlock Text="Ataques que tendrá " HorizontalAlignment="Center" Grid.Row="3"/>
+                            <Viewbox Grid.Row="4">
+                                <UniformGrid  x:Name="uniGridAtaques" Columns="2"/>
+                            </Viewbox>
+                            <!--mas adelante poner toda la info que se pueda personalizar del pokemon-->
+
+                        </Grid>
+                    </Grid>
+                    <Menu Grid.Row="1">
+                        <!-- Opcion de exportar(XSE,binarioMio) y importar(binarioMio)-->
+                        <!--Opcion de Aplicar en la ROM-->
+                        <!--lista de pokemons-->
+                        <!--Poder ver la vista previa del script y en forma de bytes en HEX-->
+                        <MenuItem Header="Exportar">
+                            <MenuItem x:Name="exportarXSE" Header="XSE" Click="exportarFRXSE_Click"/>
+                            <MenuItem x:Name="exportarEVPE" Header="EVPEP1" Click="exportarEVPE_Click" />
+                        </MenuItem>
+                        <MenuItem Header="Importar">
+                            <MenuItem x:Name="importarEVPE" Header="EVPEP1" Click="importarEVPE_Click" />
+                        </MenuItem>
+                        <MenuItem Header="Ver Script" Click="previsualizacionXSE_Click"/>
+                        <MenuItem Header="Aplicar en la rom" Click="MenuItem_Click" />
+                        <ComboBox x:Name="cmbPokemons" Width="165" SelectionChanged="cmbPokemons_SelectionChanged" IsTextSearchEnabled="True" IsEditable="True"/>
+                    </Menu>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Rutas por donde aparecera" IsEnabled="False" >
+                <!--Zona donde se configuran las rutas en este caso si supera los 20 avisara que se tendra que repuntear la direccion por defecto por una nueva y que se pueda escoger por el usuario-->
+                <!--Hay que mirar el maximo de filas que es 256-->
+                <!--poder exportar el resultado para guardarlo  y poderlo importar tambien-->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="355*"/>
+                        <ColumnDefinition Width="154*"/>
+                    </Grid.ColumnDefinitions>
+                    <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto">
+                        <StackPanel  x:Name="stkPanelFilasRutas"/>
+                    </ScrollViewer>
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="68*"/>
+                            <RowDefinition Height="201*"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="OffSet:"/>
+                                <TextBox x:Name="txtOffsetTablaRutas"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Numero de Filas:"/>
+                                <TextBox x:Name="txtNumeroDeFilas"/>
+                            </StackPanel>
+                            <Button x:Name="btnAñadirFila" Content="Añadir Fila" Click="btnAñadirFila_Click"/>
+
+                        </StackPanel>
+                        <StackPanel Grid.Row="1">
+                            <ComboBox x:Name="cmbMapasDisponiblesRom" SelectionChanged="cmbMapas_SelectionChanged"/>
+                            <Image x:Name="imgMapaActual" Height="135"/>
+                            <CheckBox x:Name="ckQuitarHaciendoClick" Content="Quitar fila haciendo click" IsChecked="False"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Button x:Name="btnGuardar" Content="Guardar" Click="btnGuardar_Click"/>
+                                <Button x:Name="btnExportarP2" Content="Exportar" Click="btnExportarP2_Click"/>
+                                <Button x:Name="btnImportarP2" Content="Importar" Click="btnImportarP2_Click"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

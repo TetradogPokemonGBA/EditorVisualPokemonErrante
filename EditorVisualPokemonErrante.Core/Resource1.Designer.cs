@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace EditorVisualPokemonErrante {
+namespace EditorVisualPokemonErrante.Core {
     using System;
     
     
@@ -22,7 +22,7 @@ namespace EditorVisualPokemonErrante {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Resource1 {
+    internal class Resource1 {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,10 +36,10 @@ namespace EditorVisualPokemonErrante {
         ///   Devuelve la instancia de ResourceManager almacenada en caché utilizada por esta clase.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("EditorVisualPokemonErrante.Resource1", typeof(Resource1).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("EditorVisualPokemonErrante.Core.Resource1", typeof(Resource1).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace EditorVisualPokemonErrante {
         ///   búsquedas de recursos mediante esta clase de recurso fuertemente tipado.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace EditorVisualPokemonErrante {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Congelado {
+        internal static System.Drawing.Bitmap Congelado {
             get {
                 object obj = ResourceManager.GetObject("Congelado", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -73,7 +73,7 @@ namespace EditorVisualPokemonErrante {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Congelado_Off {
+        internal static System.Drawing.Bitmap Congelado_Off {
             get {
                 object obj = ResourceManager.GetObject("Congelado_Off", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -83,7 +83,7 @@ namespace EditorVisualPokemonErrante {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Dormido {
+        internal static System.Drawing.Bitmap Dormido {
             get {
                 object obj = ResourceManager.GetObject("Dormido", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -93,7 +93,7 @@ namespace EditorVisualPokemonErrante {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Dormido_Off {
+        internal static System.Drawing.Bitmap Dormido_Off {
             get {
                 object obj = ResourceManager.GetObject("Dormido_Off", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -103,7 +103,7 @@ namespace EditorVisualPokemonErrante {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap DormidoZ {
+        internal static System.Drawing.Bitmap DormidoZ {
             get {
                 object obj = ResourceManager.GetObject("DormidoZ", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -113,7 +113,7 @@ namespace EditorVisualPokemonErrante {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap DormidoZ_Off {
+        internal static System.Drawing.Bitmap DormidoZ_Off {
             get {
                 object obj = ResourceManager.GetObject("DormidoZ_Off", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -123,7 +123,7 @@ namespace EditorVisualPokemonErrante {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Emerald {
+        internal static System.Drawing.Bitmap Emerald {
             get {
                 object obj = ResourceManager.GetObject("Emerald", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -133,7 +133,7 @@ namespace EditorVisualPokemonErrante {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Envenenado {
+        internal static System.Drawing.Bitmap Envenenado {
             get {
                 object obj = ResourceManager.GetObject("Envenenado", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -143,7 +143,7 @@ namespace EditorVisualPokemonErrante {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Envenenado_Off {
+        internal static System.Drawing.Bitmap Envenenado_Off {
             get {
                 object obj = ResourceManager.GetObject("Envenenado_Off", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -153,7 +153,7 @@ namespace EditorVisualPokemonErrante {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Envenenamiento_grave {
+        internal static System.Drawing.Bitmap Envenenamiento_grave {
             get {
                 object obj = ResourceManager.GetObject("Envenenamiento_grave", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -163,7 +163,7 @@ namespace EditorVisualPokemonErrante {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Envenenamiento_grave_Off {
+        internal static System.Drawing.Bitmap Envenenamiento_grave_Off {
             get {
                 object obj = ResourceManager.GetObject("Envenenamiento_grave_Off", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -173,7 +173,7 @@ namespace EditorVisualPokemonErrante {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap FireRed {
+        internal static System.Drawing.Bitmap FireRed {
             get {
                 object obj = ResourceManager.GetObject("FireRed", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -181,9 +181,19 @@ namespace EditorVisualPokemonErrante {
         }
         
         /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Icon similar a (Icono).
+        /// </summary>
+        internal static System.Drawing.Icon iconoPokemonErrante {
+            get {
+                object obj = ResourceManager.GetObject("iconoPokemonErrante", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap LeafGreen {
+        internal static System.Drawing.Bitmap LeafGreen {
             get {
                 object obj = ResourceManager.GetObject("LeafGreen", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -193,7 +203,7 @@ namespace EditorVisualPokemonErrante {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Paralizado {
+        internal static System.Drawing.Bitmap Paralizado {
             get {
                 object obj = ResourceManager.GetObject("Paralizado", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -203,7 +213,7 @@ namespace EditorVisualPokemonErrante {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Paralizado_Off {
+        internal static System.Drawing.Bitmap Paralizado_Off {
             get {
                 object obj = ResourceManager.GetObject("Paralizado_Off", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -213,7 +223,7 @@ namespace EditorVisualPokemonErrante {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Quemado {
+        internal static System.Drawing.Bitmap Quemado {
             get {
                 object obj = ResourceManager.GetObject("Quemado", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -223,7 +233,7 @@ namespace EditorVisualPokemonErrante {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Quemado_Off {
+        internal static System.Drawing.Bitmap Quemado_Off {
             get {
                 object obj = ResourceManager.GetObject("Quemado_Off", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));

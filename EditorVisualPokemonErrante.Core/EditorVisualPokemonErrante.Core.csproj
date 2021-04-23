@@ -1,0 +1,52 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Gabriel.Cat.S.Binaris" Version="1.1.5-Preview1.0" />
+    <PackageReference Include="Gabriel.Cat.S.Utilitats" Version="1.1.5.4" />
+    <PackageReference Include="Gabriel.Cat.S.Wpf" Version="1.0.1-preview1.0.0" />
+    <PackageReference Include="PokemonGBAFrameWork" Version="1.5.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="AplicarEnLaRom.xaml.cs">
+      <DependentUpon>AplicarEnLaRom.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="FilaRuta.xaml.cs">
+      <DependentUpon>FilaRuta.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="PrevisualizarScriptXSE.xaml.cs">
+      <DependentUpon>PrevisualizarScriptXSE.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Resource1.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resource1.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resource1.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="AplicarEnLaRom.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="FilaRuta.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="PrevisualizarScriptXSE.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
+</Project>

@@ -1,12 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-# SharpDevelop 5.0
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EditorVisualPokemonErrante", "EditorVisualPokemonErrante\EditorVisualPokemonErrante.csproj", "{B4793B49-2852-4B33-81A4-3F3EDC1ED2F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokemonGBAFrameWork", "..\..\..\..\Programas\PokemonGBAFrameWork\PokemonGBAFrameWork\PokemonGBAFrameWork.csproj", "{42256C23-1E9B-41E5-A5DA-D3C6AF6B824D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EditorVisualPokemonErrante.Core", "EditorVisualPokemonErrante.Core\EditorVisualPokemonErrante.Core.csproj", "{F7429B9D-1044-48F5-8F49-37A3A5F3F9F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,12 +17,15 @@ Global
 		{B4793B49-2852-4B33-81A4-3F3EDC1ED2F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4793B49-2852-4B33-81A4-3F3EDC1ED2F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4793B49-2852-4B33-81A4-3F3EDC1ED2F7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{42256C23-1E9B-41E5-A5DA-D3C6AF6B824D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{42256C23-1E9B-41E5-A5DA-D3C6AF6B824D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{42256C23-1E9B-41E5-A5DA-D3C6AF6B824D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{42256C23-1E9B-41E5-A5DA-D3C6AF6B824D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7429B9D-1044-48F5-8F49-37A3A5F3F9F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7429B9D-1044-48F5-8F49-37A3A5F3F9F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7429B9D-1044-48F5-8F49-37A3A5F3F9F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7429B9D-1044-48F5-8F49-37A3A5F3F9F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F146D48C-0B07-48E3-A830-42F0003E1FDA}
 	EndGlobalSection
 EndGlobal
